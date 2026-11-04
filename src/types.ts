@@ -1,43 +1,102 @@
-export type ActiveTab = 'home' | 'play' | 'chaos' | 'stats' | 'profile';
+export type TabId = 'map' | 'stats' | 'daily' | 'badges' | 'profile';
 
-export type ArchetypeId = 'chill' | 'chaos' | 'strategist' | 'climber';
+export type ArchetypeId = 'chill' | 'chaos' | 'strategist' | 'connector';
 
-export interface Archetype {
-  id: ArchetypeId;
+/** How a choice "feels". Drives the play-style readout. */
+export type Tone = 'calm' | 'reactive' | 'avoid' | 'humor';
+
+/** The five EQ skills the game trains. */
+export type SkillId = 'awareness' | 'control' | 'empathy' | 'voice' | 'boundaries';
+
+export type WorldId = 'chat' | 'school' | 'friends' | 'home' | 'online';
+
+export interface Choice {
+  id: string;
+  text: string;
+  tone: Tone;
+  /** 0 = backfires, 3 = high-EQ move */
+  score: 0 | 1 | 2 | 3;
+  skill: SkillId;
+  /** What happens next, shown right after the pick. */
+  result: string;
+}
+
+export interface Beat {
+  prompt: string;
+  /** Optional prompt override depending on the tone picked in the previous beat. */
+  promptByTone?: Partial<Record<Tone, string>>;
+  choices: Choice[];
+}
+
+export interface Line {
+  /** Speaker name. Empty string = narration. */
+  from: string;
+  text: string;
+  me?: boolean;
+}
+
+export interface Lesson {
+  skill: SkillId;
   title: string;
-  emoji: string;
-  description: string;
-  glowClass: string;
-  themeColor: string;
+  body: string;
+  tryThis: string;
 }
 
-export type ScenarioState = 
-  | 'splash'            // Start screen
-  | 'archetype_select'  // Screen 1: Choose archetype
-  | 'chat_setup'        // Screen 12: Chat setup
-  | 'scenario_intro'    // Screen 9: Scenario problem intro
-  | 'decision_gameplay' // Screen 11: Main decision choices
-  | 'outcome_reveal'    // Screen 7: Results of the decision
-  | 'dbt_lesson'        // Screen 10: Evaluation & DBT lesson
-  | 'locked_levels';    // Screen 8: Preview of locked states
-
-export interface Customizations {
-  moodAura: string;
-  moodAuraEmoji: string;
-  dripPack: 'ronin' | 'griptape' | 'voidwalker';
-  hairIndex: number;
+export interface Scenario {
+  id: string;
+  world: WorldId;
+  title: string;
+  hook: string;
+  /** 1–5 */
+  chaos: number;
+  mode: 'chat' | 'scene';
+  /** Chat name (for chat mode) or location (for scene mode). */
+  place: string;
+  lines: Line[];
+  beats: [Beat, Beat];
+  lesson: Lesson;
 }
 
-export interface UserState {
-  archetypeSelected: boolean;
-  selectedArchetype: ArchetypeId | null;
+export interface DailyChaos {
+  id: string;
+  title: string;
+  setup: string;
+  choices: Choice[];
+  tip: string;
+}
+
+export interface World {
+  id: WorldId;
+  title: string;
+  tagline: string;
+  icon: string;
+  color: string;
+  free: boolean;
+}
+
+export interface ScenarioRecord {
+  stars: number;
+  bestScore: number;
+  plays: number;
+}
+
+export interface GameState {
+  version: 1;
+  onboarded: boolean;
+  name: string;
+  archetype: ArchetypeId | null;
   aura: number;
-  level: number;
-  pulseRate: number;
-  streakDays: number;
-  calmDecisionsPercentage: number;
-  reactiveSpikesPercentage: number;
-  customizations: Customizations;
-  currentScenarioCompleted: boolean;
-  scenarioChoicesSelected: string | null;
+  skills: Record<SkillId, number>;
+  tones: Record<Tone, number>;
+  records: Record<string, ScenarioRecord>;
+  daily: {
+    lastDate: string | null;
+    streak: number;
+    bestStreak: number;
+    done: Record<string, number>; // date -> score
+  };
+  auraColor: string;
+  settings: { haptics: boolean; reduceMotion: boolean };
+  unlocked: boolean;
+  createdAt: string;
 }

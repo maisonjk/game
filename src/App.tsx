@@ -1,217 +1,115 @@
-import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
-import BottomNav from './components/BottomNav';
-import Splash from './components/Splash';
-import ArchetypeSelector from './components/ArchetypeSelector';
-import LifeMap from './components/LifeMap';
-import StatsDashboard from './components/StatsDashboard';
-import ProfileIdentity from './components/ProfileIdentity';
-import ScenarioPlay from './components/ScenarioPlay';
-import ChaosFeed from './components/ChaosFeed';
-import { ActiveTab, ArchetypeId, Customizations } from './types';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { Capacitor } from '@capacitor/core';
+import { GameProvider, useGame } from './lib/store';
+import { localDate, nextScenario, type RunResult } from './lib/game';
+import type { Scenario, TabId } from './types';
+import Onboarding, { Splash } from './components/Onboarding';
+import { BottomNav, Header } from './components/Chrome';
+import MapScreen from './components/MapScreen';
+import DailyScreen from './components/DailyScreen';
+import StatsScreen from './components/StatsScreen';
+import BadgesScreen from './components/BadgesScreen';
+import ProfileScreen from './components/ProfileScreen';
+import ScenarioPlayer from './components/ScenarioPlayer';
+import { LegalViewer, Paywall, Settings, type LegalPage } from './components/Sheets';
+import { Icon, Toast } from './components/ui';
 
 export default function App() {
-  // Splash and start flow state
-  const [hasStarted, setHasStarted] = useState<boolean>(() => {
-    const saved = localStorage.getItem('social_levels_has_started');
-    return saved === 'true';
-  });
-
-  const [archetypeSelected, setArchetypeSelected] = useState<boolean>(() => {
-    const saved = localStorage.getItem('social_levels_arch_selected');
-    return saved === 'true';
-  });
-
-  const [selectedArchetype, setSelectedArchetype] = useState<ArchetypeId | null>(() => {
-    return localStorage.getItem('social_levels_arch') as ArchetypeId | null;
-  });
-
-  // Numeric gaming states
-  const [aura, setAura] = useState<number>(() => {
-    const saved = localStorage.getItem('social_levels_aura');
-    return saved ? parseInt(saved, 10) : 942;
-  });
-
-  const [level, setLevel] = useState<number>(() => {
-    const saved = localStorage.getItem('social_levels_level');
-    return saved ? parseInt(saved, 10) : 14;
-  });
-
-  const [pulseRate, setPulseRate] = useState<number>(124);
-  const [streakDays, setStreakDays] = useState<number>(15);
-
-  // Avatar customizations states
-  const [customizations, setCustomizations] = useState<Customizations>(() => {
-    const saved = localStorage.getItem('social_levels_customs');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-         // Fallback
-      }
-    }
-    return {
-      moodAura: 'bg-primary-container',
-      moodAuraEmoji: '💙',
-      dripPack: 'ronin',
-      hairIndex: 0
-    };
-  });
-
-  // Base state managers navigation tabs
-  const [activeTab, setActiveTab] = useState<ActiveTab>('home');
-
-  // Sync state stats back of updates to localstorage
   useEffect(() => {
-    localStorage.setItem('social_levels_has_started', String(hasStarted));
-    localStorage.setItem('social_levels_arch_selected', String(archetypeSelected));
-    if (selectedArchetype) {
-      localStorage.setItem('social_levels_arch', selectedArchetype);
-    }
-    localStorage.setItem('social_levels_aura', String(aura));
-    localStorage.setItem('social_levels_level', String(level));
-    localStorage.setItem('social_levels_customs', JSON.stringify(customizations));
-  }, [hasStarted, archetypeSelected, selectedArchetype, aura, level, customizations]);
+    if (!Capacitor.isNativePlatform()) return;
+    import('@capacitor/status-bar').then(({ StatusBar, Style }) => StatusBar.setStyle({ style: Style.Dark }).catch(() => {}));
+    import('@capacitor/splash-screen').then(({ SplashScreen }) => SplashScreen.hide().catch(() => {}));
+  }, []);
+  return (
+    <GameProvider fallback={<Splash />}>
+      <Game />
+    </GameProvider>
+  );
+}
 
-  const handleStartGame = () => {
-    setHasStarted(true);
-  };
+function Game() {
+  const { state } = useGame();
+  const [tab, setTab] = useState<TabId>('map');
+  const [playing, setPlaying] = useState<Scenario | null>(null);
+  const [paywall, setPaywall] = useState(false);
+  const [settings, setSettings] = useState(false);
+  const [legal, setLegal] = useState<LegalPage | null>(null);
+  const [toasts, setToasts] = useState<{ id: number; node: ReactNode }[]>([]);
 
-  const handleSelectArchetype = (id: ArchetypeId) => {
-    setSelectedArchetype(id);
-    setArchetypeSelected(true);
-    // Standard starting customization depending on archetype chosen
-    if (id === 'chaos') {
-      setCustomizations(prev => ({ ...prev, moodAura: 'bg-secondary-container', moodAuraEmoji: '🔥' }));
-    } else if (id === 'strategist') {
-      setCustomizations(prev => ({ ...prev, moodAura: 'bg-tertiary-container', moodAuraEmoji: '⚡' }));
-    } else {
-      setCustomizations(prev => ({ ...prev, moodAura: 'bg-primary-container', moodAuraEmoji: '💙' }));
-    }
-    setActiveTab('home');
-  };
+  const pushToast = useCallback((node: ReactNode) => setToasts((t) => [...t, { id: Date.now() + Math.random(), node }]), []);
 
-  const handleScenarioStart = () => {
-    setActiveTab('play');
-  };
+  const celebrate = useCallback(
+    (r: RunResult) => {
+      r.newBadges.forEach((b) =>
+        pushToast(
+          <>
+            <span className="w-8 h-8 rounded-xl grid place-items-center bg-gold/20 text-gold">
+              <Icon name={b.icon} size={16} />
+            </span>
+            <span>
+              Badge unlocked: <span className="text-gold">{b.title}</span>
+            </span>
+          </>,
+        ),
+      );
+    },
+    [pushToast],
+  );
 
-  const handleUpdateStats = (auraDiff: number, levelDiff: number) => {
-    setAura(prev => Math.max(0, prev + auraDiff));
-    setLevel(prev => Math.max(1, prev + levelDiff));
-    
-    // Simulate heart rate changes on interaction
-    setPulseRate(prev => Math.min(145, Math.max(88, prev + Math.floor(Math.random() * 15 - 7))));
-  };
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [tab]);
 
-  const handleUpdateCustomizations = (updates: Partial<Customizations>) => {
-    setCustomizations(prev => ({ ...prev, ...updates }));
-  };
+  if (!state.onboarded) return <Onboarding />;
 
-  const handleResetGameData = () => {
-    // Hidden debug helper to reset
-    localStorage.clear();
-    setHasStarted(false);
-    setArchetypeSelected(false);
-    setSelectedArchetype(null);
-    setAura(942);
-    setLevel(14);
-    setPulseRate(124);
-    setCustomizations({
-      moodAura: 'bg-primary-container',
-      moodAuraEmoji: '💙',
-      dripPack: 'ronin',
-      hairIndex: 0
-    });
-    setActiveTab('home');
-  };
+  const dailyDue = state.daily.done[localDate()] === undefined;
+  const upNext = playing ? nextScenario(state) : null;
+  const nextAfter = upNext && upNext.id !== playing?.id ? upNext : null;
 
   return (
-    <div className="min-h-screen bg-[#0f131e] text-on-surface flex flex-col font-sans antialiased pb-24 relative select-none">
-      
-      {/* Background Atmosphere Layers */}
-      <div className="fixed inset-0 bg-grid z-0 opacity-40 pointer-events-none"></div>
-
-      {/* Render top AppBar once gameplay begins */}
-      {hasStarted && archetypeSelected ? (
-        <Header 
-          level={level} 
-          activeTab={activeTab} 
-          onNavigate={(tab) => setActiveTab(tab)} 
-          archetypeSelected={archetypeSelected}
-        />
-      ) : null}
-
-      {/* Dynamic Screen routing layout state machine */}
-      <div className="flex-grow z-10 w-full">
-        {!hasStarted ? (
-          <Splash onStart={handleStartGame} />
-        ) : !archetypeSelected ? (
-          <ArchetypeSelector onSelected={handleSelectArchetype} />
-        ) : (
-          <>
-            {activeTab === 'home' && (
-              <LifeMap 
-                aura={aura} 
-                level={level} 
-                onSelectScenario={handleScenarioStart}
-                onShowLockedLevels={() => setActiveTab('play')} 
-              />
-            )}
-
-            {activeTab === 'play' && (
-              <ScenarioPlay 
-                aura={aura} 
-                level={level} 
-                selectedArchetype={selectedArchetype}
-                onUpdateStats={handleUpdateStats}
-                onUpdateCustomizations={handleUpdateCustomizations}
-                onGoToTab={(tab) => setActiveTab(tab)}
-                onBackToHome={() => setActiveTab('home')}
-              />
-            )}
-
-            {activeTab === 'chaos' && (
-              <ChaosFeed onPlayScenario={handleScenarioStart} />
-            )}
-
-            {activeTab === 'stats' && (
-              <StatsDashboard aura={aura} />
-            )}
-
-            {activeTab === 'profile' && (
-              <ProfileIdentity 
-                aura={aura} 
-                level={level} 
-                pulseRate={pulseRate}
-                streakDays={streakDays}
-                selectedArchetype={selectedArchetype}
-                customizations={customizations}
-                onUpdateCustomizations={handleUpdateCustomizations}
-              />
-            )}
-          </>
-        )}
+    <div className="min-h-[100dvh] bg-ink">
+      <div className="fixed inset-0 bg-grid pointer-events-none" />
+      <div className="relative">
+        <Header onProfile={() => setTab('profile')} />
+        <main>
+          {tab === 'map' && <MapScreen onPlay={setPlaying} onPaywall={() => setPaywall(true)} />}
+          {tab === 'daily' && <DailyScreen onCelebrate={celebrate} />}
+          {tab === 'stats' && <StatsScreen />}
+          {tab === 'badges' && <BadgesScreen />}
+          {tab === 'profile' && <ProfileScreen onSettings={() => setSettings(true)} />}
+        </main>
+        <BottomNav tab={tab} onTab={setTab} dailyDue={dailyDue} />
       </div>
 
-      {/* Hidden reset button inside footer for developers testing */}
-      {hasStarted && (
-        <div className="fixed bottom-26 right-4 z-40 opacity-20 hover:opacity-100 transition-opacity">
-          <button 
-            onClick={handleResetGameData}
-            className="px-2.5 py-1 text-[8px] font-sans font-black text-outline uppercase tracking-wider rounded-lg border border-white/10 hover:border-red-500/40 hover:text-red-400 bg-surface/80 backdrop-blur-md"
-          >
-            Reset Game
-          </button>
-        </div>
+      {playing && (
+        <ScenarioPlayer
+          key={playing.id}
+          scenario={playing}
+          onExit={() => setPlaying(null)}
+          hasNext={!!nextAfter}
+          onNext={() => setPlaying(nextAfter)}
+          onCelebrate={celebrate}
+        />
       )}
 
-      {/* Render Bottom Navigation once gameplay begins */}
-      {hasStarted && archetypeSelected ? (
-        <BottomNav 
-          activeTab={activeTab} 
-          onNavigate={(tab) => setActiveTab(tab)} 
-        />
-      ) : null}
+      <Paywall open={paywall} onClose={() => setPaywall(false)} onLegal={setLegal} />
+      <Settings
+        open={settings}
+        onClose={() => setSettings(false)}
+        onPaywall={() => {
+          setSettings(false);
+          setPaywall(true);
+        }}
+        onLegal={setLegal}
+      />
+      <LegalViewer page={legal} onClose={() => setLegal(null)} />
+
+      {toasts[0] && (
+        <Toast key={toasts[0].id} onDone={() => setToasts((t) => t.slice(1))}>
+          {toasts[0].node}
+        </Toast>
+      )}
     </div>
   );
 }
+

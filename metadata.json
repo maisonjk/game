@@ -1,6 +1,0 @@
-{
-  "name": "Social Levels",
-  "description": "An EQ calibrated RPG where real life is gamified. Navigate social scenarios, make critical decisions, build your aura, and lock in your player archetype.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

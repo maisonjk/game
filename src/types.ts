@@ -1,4 +1,4 @@
-export type TabId = 'map' | 'stats' | 'daily' | 'badges' | 'profile';
+export type TabId = 'map' | 'daily' | 'you';
 
 export type ArchetypeId = 'chill' | 'chaos' | 'strategist' | 'connector';
 
@@ -55,6 +55,9 @@ export interface Scenario {
   lines: Line[];
   beats: [Beat, Beat];
   lesson: Lesson;
+  /** Heavy topic: no stars or verdict, skip allowed, resources shown. */
+  sensitive?: boolean;
+  careNote?: string;
 }
 
 export interface DailyChaos {
@@ -94,6 +97,7 @@ export interface GameState {
     streak: number;
     bestStreak: number;
     done: Record<string, number>; // date -> score
+    picks?: Record<string, string>; // date -> choice id
   };
   auraColor: string;
   settings: { haptics: boolean; reduceMotion: boolean };

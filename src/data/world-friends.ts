@@ -19,19 +19,19 @@ export const FRIENDS: Scenario[] = [
       {
         prompt: 'Nia is halfway down the steps. What do you do?',
         choices: [
-          c('a', '“Wait, the left side isn’t working. Did something happen?”', 'calm', 3, 'voice', 'Nia stops. “Oh no. I dropped them on the bus. I thought they were fine.”'),
+          c('a', '“Wait, the left side’s dead. What happened?”', 'reactive', 3, 'voice', 'Nia stops. “Oh no. I dropped them on the bus. I thought they were fine.”'),
           c('b', '“Seriously?? You broke them!”', 'reactive', 1, 'control', 'Nia gets defensive: “I didn’t know!” Now it’s a fight on your porch.'),
           c('c', 'Say nothing. Text her later, maybe.', 'avoid', 1, 'voice', 'You never text. You quietly stop lending her stuff.'),
-          c('d', '“Uh, my headphones came back in mono mode?”', 'humor', 2, 'voice', 'Nia laughs nervously, then realizes: “Wait, did I break them?”'),
+          c('d', '“Uh, my headphones came back in mono mode?”', 'humor', 3, 'voice', 'Nia laughs nervously, then: “Wait, did I break them? Oh no, I dropped them on the bus.” The truth comes out easy.'),
         ],
       },
       {
         prompt: 'Nia says: “I’m so sorry. I don’t have money to replace them right now.”',
         choices: [
-          c('a', '“I get it. Could you chip in over time, or help me look into the warranty?”', 'calm', 3, 'boundaries', 'Nia agrees to both. The warranty actually covers it. Friendship intact.'),
+          c('a', '“Could you chip in over time, or help with the warranty?”', 'reactive', 3, 'boundaries', 'Nia agrees to both. The warranty actually covers it. Friendship intact.'),
           c('b', '“Then you shouldn’t have borrowed them.”', 'reactive', 0, 'empathy', 'True-ish, but Nia leaves crying. Neither of you feels better.'),
           c('c', '“It’s fine, don’t worry about it.” (You’re worried about it.)', 'avoid', 1, 'awareness', 'You’re out $80 and kind of resentful for weeks.'),
-          c('d', '“You owe me one concert-level apology. And maybe ten bucks a month.”', 'humor', 2, 'boundaries', 'She laughs and agrees. A light way to make a real ask.'),
+          c('d', '“You owe me one concert-level apology. And maybe ten bucks a month.”', 'humor', 3, 'boundaries', 'She laughs and agrees to pay you back. A light way to make a real ask, and it worked.'),
         ],
       },
     ],
@@ -60,10 +60,10 @@ export const FRIENDS: Scenario[] = [
       {
         prompt: 'Hannah is pushing. What do you say?',
         choices: [
-          c('a', '“If Priya wants to share, she will. I’m not gonna speak for her.”', 'calm', 3, 'boundaries', 'Hannah sends “ugh fine.” Priya’s secret stays hers.'),
+          c('a', '“Not my story to tell. Ask her.”', 'reactive', 3, 'boundaries', 'Hannah sends “ugh fine.” Priya’s secret stays hers.'),
           c('b', '“OMG ok but you can’t tell anyone…”', 'reactive', 0, 'empathy', 'By Monday, three people know. Priya knows exactly where it came from.'),
           c('c', 'Leave Hannah on read.', 'avoid', 1, 'voice', 'Hannah decides that means it’s something juicy and starts guessing out loud.'),
-          c('d', '“The secret is she’s secretly a lizard. You didn’t hear it from me.”', 'humor', 2, 'boundaries', 'Hannah laughs and drops it. Deflected without a fight.'),
+          c('d', '“The secret is she’s secretly a lizard. You didn’t hear it from me.”', 'humor', 3, 'boundaries', 'Hannah laughs and drops it. Deflected, no fight, secret safe.'),
         ],
       },
       {
@@ -72,7 +72,7 @@ export const FRIENDS: Scenario[] = [
           c('a', '“We are! That’s why I’d keep your secrets too.”', 'calm', 3, 'empathy', 'Hannah pauses: “…ok fair actually.” Loyalty explained, not just enforced.'),
           c('b', '“Guess not.”', 'reactive', 0, 'control', 'Hannah gets offended. Now you have two problems.'),
           c('c', 'Give in and tell her a little bit.', 'avoid', 0, 'boundaries', '“A little bit” turns into the whole story by lunch.'),
-          c('d', '“If you’re worried about Priya, maybe just ask how she’s doing?”', 'calm', 3, 'empathy', 'Hannah does. Priya ends up feeling supported, not gossiped about.'),
+          c('d', '“If you’re worried about Priya, maybe just ask how she’s doing?”', 'calm', 2, 'empathy', 'Hannah does ask. Priya opens up a little, though she wonders why Hannah suddenly cares.'),
         ],
       },
     ],
@@ -100,10 +100,10 @@ export const FRIENDS: Scenario[] = [
       {
         prompt: 'You’re kind of tired of it. What do you send?',
         choices: [
-          c('a', '“Honestly I’m out of ideas. Can someone else pick this week?”', 'calm', 3, 'voice', 'Silence for a sec. Then Ari: “ok I got it.” You just shared the load.'),
+          c('a', '“I’m out of ideas. Can someone else pick?”', 'reactive', 3, 'voice', 'Silence for a sec. Then Ari: “ok I got it.” You just shared the load.'),
           c('b', '“Why is it ALWAYS me? Do you guys even want to hang out?”', 'reactive', 1, 'control', 'Fair feeling, sharp delivery. Leo replies: “dang ok chill.”'),
           c('c', 'Plan it again and say nothing.', 'avoid', 1, 'awareness', 'The hangout’s fun. The resentment keeps growing.'),
-          c('d', '“The planning department is closed for renovations 🚧”', 'humor', 2, 'voice', 'They laugh and get the hint. Ari volunteers.'),
+          c('d', '“The planning department is closed for renovations 🚧”', 'humor', 3, 'voice', 'They laugh and get the hint. Ari: “ok ok I got this week.”'),
         ],
       },
       {
@@ -112,7 +112,7 @@ export const FRIENDS: Scenario[] = [
           c('a', 'Go anyway, and tell Ari you appreciated him planning.', 'calm', 3, 'empathy', 'It’s actually fun. Ari offers to plan again next week.'),
           c('b', '“That’s kinda boring, I’ll just plan something better.”', 'reactive', 0, 'empathy', 'Ari feels shot down. Guess who’s planning forever now.'),
           c('c', 'Skip it without saying why.', 'avoid', 1, 'voice', 'Ari wonders if you’re mad.'),
-          c('d', '“I’m in, but next week can we do food?”', 'calm', 2, 'voice', 'Clear and easy. Everyone agrees.'),
+          c('d', '“I’m in, but next week can we do food?”', 'reactive', 2, 'voice', 'Clear and easy. Everyone agrees.'),
         ],
       },
     ],
@@ -149,7 +149,7 @@ export const FRIENDS: Scenario[] = [
       {
         prompt: 'The next day you get a quiet moment with Jada.',
         choices: [
-          c('a', '“I’ve missed hanging out. Can we do something, just us, this week?”', 'calm', 3, 'voice', 'Jada says “YES, I’ve missed you too.” It was never a competition.'),
+          c('a', '“I miss you. Can we hang, just us, this week?”', 'reactive', 3, 'voice', 'Jada says “YES, I’ve missed you too.” It was never a competition.'),
           c('b', '“Do you even still want to be my friend?”', 'reactive', 1, 'awareness', 'Jada is surprised, then reassures you. A little intense, but honest.'),
           c('c', 'Say nothing and hope it goes back to normal.', 'avoid', 1, 'voice', 'It might. It might not.'),
           c('d', '“Want to invite Sofia to our movie night too?”', 'calm', 3, 'empathy', 'Turns out Sofia’s great. Now you have two friends.'),
@@ -179,10 +179,10 @@ export const FRIENDS: Scenario[] = [
       {
         prompt: 'You’re annoyed. What do you send?',
         choices: [
-          c('a', '“Okay. This is the third time though, is everything good?”', 'calm', 3, 'voice', 'Theo admits he’s been overwhelmed with work shifts. That explains a lot.'),
+          c('a', '“Third time though. Everything good?”', 'reactive', 3, 'voice', 'Theo admits he’s been overwhelmed with work shifts. That explains a lot.'),
           c('b', '“Of course you can’t. Classic Theo.”', 'reactive', 0, 'control', 'Theo replies “wow ok.” Now he feels attacked instead of sorry.'),
           c('c', '“np!” and stop inviting him.', 'avoid', 1, 'voice', 'He never knows why the invites stopped.'),
-          c('d', '“I’m starting a cancel counter. You’re at 3. Prizes at 5.”', 'humor', 2, 'voice', 'He laughs and apologizes for real. Message received.'),
+          c('d', '“I’m starting a cancel counter. You’re at 3. Prizes at 5.”', 'humor', 3, 'voice', 'He laughs, then apologizes for real and tells you about his work shifts.'),
         ],
       },
       {
@@ -191,7 +191,7 @@ export const FRIENDS: Scenario[] = [
           c('a', '“Got it. Can we plan around your schedule? Send me your free days.”', 'calm', 3, 'empathy', 'He sends them. You hang out that Sunday, no cancels.'),
           c('b', '“Then stop saying yes if you can’t.”', 'reactive', 1, 'boundaries', 'Fair point, harsh delivery. He agrees, a little stung.'),
           c('c', '“It’s fine.” (Still annoyed.)', 'avoid', 1, 'awareness', 'The annoyance sticks around.'),
-          c('d', '“I get it. Just let me know earlier next time if it’s not gonna work?”', 'calm', 3, 'boundaries', 'He agrees. That’s a boundary with empathy built in.'),
+          c('d', '“I get it. Just let me know earlier next time if it’s not gonna work?”', 'reactive', 3, 'boundaries', 'He agrees. That’s a boundary with empathy built in.'),
         ],
       },
     ],
@@ -218,10 +218,10 @@ export const FRIENDS: Scenario[] = [
       {
         prompt: 'He said “be honest.” What do you say?',
         choices: [
-          c('a', '“The beat is honestly sick. Vocals feel a little loud though, maybe mix them down?”', 'calm', 3, 'voice', 'Kenji says “oh good call.” Specific + kind = useful.'),
+          c('a', '“Beat is sick. Vocals are too loud though.”', 'reactive', 3, 'voice', 'Kenji says “oh good call.” Specific + kind = useful.'),
           c('b', '“lol it’s kinda bad ngl”', 'reactive', 0, 'empathy', 'Kenji goes quiet. He doesn’t post it, or talk to you for a day.'),
           c('c', '“It’s perfect!! post it!”', 'avoid', 1, 'voice', 'He posts it. Some comments are rough. He asks why you didn’t say anything.'),
-          c('d', '“Fire rhymes with fire is a bold artistic choice 🔥🔥”', 'humor', 2, 'voice', 'He laughs and fixes the lyric. Honest, wrapped in a joke.'),
+          c('d', '“Fire rhymes with fire is a bold artistic choice 🔥🔥”', 'humor', 3, 'voice', 'He laughs and fixes the lyric. Honest, wrapped in a joke, and it landed.'),
         ],
       },
       {
@@ -230,7 +230,7 @@ export const FRIENDS: Scenario[] = [
           c('a', '“You made a whole song. Most people never try. This version just needs a polish.”', 'calm', 3, 'empathy', 'He goes back in and fixes the mix. The new version is way better.'),
           c('b', '“Maybe try something else?”', 'reactive', 0, 'empathy', 'Ouch. He deletes the project.'),
           c('c', '“No, it’s good, ignore me.”', 'avoid', 1, 'voice', 'Now your feedback means nothing to him.'),
-          c('d', '“Want me to listen to the next version before you post?”', 'calm', 3, 'empathy', 'He sends it an hour later. You’re now his official first listener.'),
+          c('d', '“Want me to listen to the next version before you post?”', 'calm', 2, 'empathy', 'He sends it later. Nice, though he still feels like he’s bad at this.'),
         ],
       },
     ],

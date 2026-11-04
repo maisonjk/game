@@ -20,10 +20,10 @@ export const SCHOOL: Scenario[] = [
       {
         prompt: 'It’s 7 PM. What do you do?',
         choices: [
-          c('a', 'Text Chris directly: “Hey, are you okay? We need 9-12 by 9 tonight. Can you do it or should we split it?”', 'calm', 3, 'voice', 'Chris replies 20 minutes later: “sorry, family stuff. can I do 2 of them?” A plan forms.'),
+          c('a', 'Text Chris: “You okay? We need 9-12 by 9. Can you, or should we split it?”', 'reactive', 3, 'voice', 'Chris replies 20 minutes later: “sorry, family stuff. can I do 2 of them?” A plan forms.'),
           c('b', 'Post in the chat: “Chris is useless, as usual.”', 'reactive', 0, 'control', 'Chris sees it and goes fully silent. Now nobody’s doing 9-12.'),
           c('c', 'Quietly do all of Chris’s slides yourself and say nothing.', 'avoid', 1, 'boundaries', 'The slides get done. You’re up until midnight and kind of furious.'),
-          c('d', '“@Chris blink twice if you’ve been kidnapped”', 'humor', 2, 'voice', 'Chris laughs and replies. It gets his attention without shaming him.'),
+          c('d', '“@Chris blink twice if you’ve been kidnapped”', 'humor', 3, 'voice', 'Chris laughs and replies right away. It got his attention without shaming him.'),
         ],
       },
       {
@@ -34,7 +34,7 @@ export const SCHOOL: Scenario[] = [
         choices: [
           c('a', '“That’s fine, thanks for telling us. Lena and I can split the other two.”', 'calm', 3, 'empathy', 'You hit the deadline and Chris feels like part of the team instead of a problem.'),
           c('b', '“Everyone has stuff. You still should’ve said something.”', 'reactive', 1, 'empathy', 'True, but Chris shuts down. The slides get done, the team feels tense.'),
-          c('c', 'Tell the truth about who did what, without trashing anyone.', 'calm', 2, 'voice', 'The grade reflects the real work. You were honest without being cruel.'),
+          c('c', 'Tell the truth about who did what, without trashing anyone.', 'reactive', 2, 'voice', 'The grade reflects the real work. You were honest without being cruel.'),
           c('d', 'Cover for everyone and say it was split evenly.', 'avoid', 1, 'boundaries', 'Nobody gets in trouble, but you learn your effort can disappear without anyone noticing.'),
         ],
       },
@@ -75,7 +75,7 @@ export const SCHOOL: Scenario[] = [
           reactive: 'After class, Mr. Patel says: “Want to try that again, calmly?”',
         },
         choices: [
-          c('a', '“I wasn’t the one talking. I know it looked like it. Could I move seats so it’s clearer?”', 'calm', 3, 'voice', 'He drops the detention and moves your seat. Respectful and specific wins.'),
+          c('a', '“It wasn’t me talking. Could I move seats so it’s clearer?”', 'reactive', 3, 'voice', 'He drops the detention and moves your seat. Respectful and specific wins.'),
           c('b', '“You always pick on me.”', 'reactive', 0, 'awareness', 'He gets defensive. The detention stays.'),
           c('c', '“Never mind, it’s fine.”', 'avoid', 1, 'voice', 'You serve the detention. Next time it might happen again.'),
           c('d', 'Ask a parent to email the teacher about it later.', 'calm', 2, 'boundaries', 'It gets sorted out, slower. Speaking up yourself first is a skill worth building.'),
@@ -109,7 +109,7 @@ export const SCHOOL: Scenario[] = [
           c('a', '“No stress, I’ll grab a chair.” Pull one over from the next table.', 'calm', 3, 'voice', 'People scoot. It was a space problem, not a “you” problem.'),
           c('b', '“Wow, okay. Didn’t realize I got replaced.”', 'reactive', 0, 'control', 'It gets quiet and awkward. The new kid looks mortified.'),
           c('c', 'Mumble “it’s fine” and eat in the library.', 'avoid', 1, 'awareness', 'You get through lunch, but you replay it all afternoon.'),
-          c('d', '“I’ll just eat standing like a medieval king then.”', 'humor', 2, 'voice', 'Laughs. Someone says “lol sit here” and makes space.'),
+          c('d', '“I’ll just eat standing like a medieval king then.”', 'humor', 3, 'voice', 'Laughs. Someone says “lol sit here” and scoots over. It was never about you.'),
         ],
       },
       {
@@ -118,7 +118,7 @@ export const SCHOOL: Scenario[] = [
           c('a', '“Oh, you’re good! I’m {name}. Where’d you transfer from?”', 'calm', 3, 'empathy', 'They light up. You gained a new person instead of losing a seat.'),
           c('b', '“It’s fine I guess.”', 'avoid', 1, 'empathy', 'Technically polite. They still feel like they did something wrong.'),
           c('c', 'Ignore them and talk to everyone else.', 'avoid', 0, 'empathy', 'They spend the rest of lunch feeling like an intruder.'),
-          c('d', '“Rent is due by Friday, but I’ll allow it.”', 'humor', 2, 'empathy', 'They laugh. It breaks the ice, even if you didn’t learn their name.'),
+          c('d', '“Rent is due by Friday, but I’ll allow it.”', 'humor', 3, 'empathy', 'They crack up. Instant ice-breaker, and they tell you their name.'),
         ],
       },
     ],
@@ -158,7 +158,7 @@ export const SCHOOL: Scenario[] = [
           c('a', '“Yes. Thursday after school? Let’s figure out what tripped you up.”', 'calm', 3, 'empathy', 'Zoe gets a 79 on the retake. You both feel good about it.'),
           c('b', '“I’m kinda busy but you could watch videos?”', 'avoid', 1, 'empathy', 'Fair if you really are busy. Zoe feels a little brushed off.'),
           c('c', '“Sure, but you have to actually focus this time.”', 'reactive', 1, 'voice', 'She agrees, but feels judged the whole session.'),
-          c('d', 'Say yes, but set a time limit: “I can do an hour Thursday.”', 'calm', 3, 'boundaries', 'Helpful and honest about your time. That’s a strong combo.'),
+          c('d', 'Say yes, but set a time limit: “I can do an hour Thursday.”', 'reactive', 3, 'boundaries', 'Helpful and honest about your time. That’s a strong combo.'),
         ],
       },
     ],
@@ -186,9 +186,9 @@ export const SCHOOL: Scenario[] = [
       {
         prompt: 'Leo is grinning. What’s your move?',
         choices: [
-          c('a', '“Nope. Where’d you hear that?”', 'calm', 3, 'voice', 'Leo shrugs: “someone in 3rd period.” Calm denial plus a question puts the rumor on the defensive.'),
+          c('a', '“Nope. Where’d you hear that?”', 'reactive', 3, 'voice', 'Leo shrugs: “someone in 3rd period.” Calm denial plus a question puts the rumor on the defensive.'),
           c('b', '“Whoever said that is a liar and I’ll find them.”', 'reactive', 0, 'control', 'Big reaction = more interesting rumor. Now people are talking about your meltdown too.'),
-          c('c', 'Walk away. Rumors die eventually.', 'avoid', 1, 'voice', 'Sometimes true. This time it spreads to your teacher.'),
+          c('c', 'Shrug and keep walking. Don’t feed it.', 'avoid', 2, 'voice', 'No reaction, nothing to repeat. It fades a bit, though one person keeps it going.'),
           c('d', '“If I could cheat I’d have gotten a 100, not an 88.”', 'humor', 2, 'voice', 'Leo laughs: “fair.” Kind of convincing, honestly.'),
         ],
       },
@@ -198,7 +198,7 @@ export const SCHOOL: Scenario[] = [
           c('a', 'Stay calm, explain how you studied, and offer to retake it with her watching.', 'calm', 3, 'voice', 'She says “I believe you, but thanks for offering.” The rumor loses all its power.'),
           c('b', '“So you believe random gossip now?”', 'reactive', 0, 'control', 'She gets more suspicious, not less.'),
           c('c', 'Get quiet and just say “I didn’t.”', 'avoid', 1, 'voice', 'She’s not sure. It gets dropped, but it lingers.'),
-          c('d', 'Show her your study notes and flashcards.', 'calm', 3, 'awareness', 'Receipts. She smiles and tells you not to worry.'),
+          c('d', 'Show her your study notes and flashcards.', 'calm', 2, 'awareness', 'Receipts help. She believes you, though she still wants to watch the retake.'),
         ],
       },
     ],
@@ -227,10 +227,10 @@ export const SCHOOL: Scenario[] = [
       {
         prompt: 'Your friends are laughing. What do you do?',
         choices: [
-          c('a', '“He’s in my English class, he’s actually funny. I’m gonna go say hi.”', 'calm', 3, 'empathy', 'Your friends shrug. One of them follows you over.'),
+          c('a', '“He’s actually funny. I’m gonna go say hi.”', 'reactive', 3, 'empathy', 'Your friends shrug. One of them follows you over.'),
           c('b', '“You guys are so mean, it’s embarrassing.”', 'reactive', 1, 'voice', 'They roll their eyes. Point made, but nobody moves.'),
           c('c', 'Laugh along so it’s not weird.', 'avoid', 0, 'empathy', 'Omar glances over. He saw.'),
-          c('d', '“Maybe he’s just avoiding your music taste, Ethan.”', 'humor', 2, 'voice', 'Everyone laughs at Ethan instead. The jokes stop.'),
+          c('d', '“Maybe he’s just avoiding your music taste, Ethan.”', 'humor', 3, 'voice', 'Everyone laughs at Ethan instead. The jokes stop, and nobody feels lectured.'),
         ],
       },
       {
@@ -238,7 +238,7 @@ export const SCHOOL: Scenario[] = [
         choices: [
           c('a', '“Hey, I’m in your English class. What are you listening to?”', 'calm', 3, 'empathy', 'He shows you. It’s actually good. You have something in common.'),
           c('b', '“My friends were being weird, sorry about them.”', 'calm', 1, 'empathy', 'Kind, but now he knows they were talking about him.'),
-          c('c', '“You should come sit with us.”', 'calm', 2, 'voice', 'He hesitates, then comes. It’s a little awkward, but it’s a start.'),
+          c('c', '“You should come sit with us.”', 'reactive', 2, 'voice', 'He hesitates, then comes. It’s a little awkward, but it’s a start.'),
           c('d', 'Lose your nerve and walk past.', 'avoid', 0, 'control', 'He puts the headphone back on. Next time.'),
         ],
       },

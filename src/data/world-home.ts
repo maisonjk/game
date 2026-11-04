@@ -30,7 +30,7 @@ export const HOME: Scenario[] = [
           reactive: 'Next morning at breakfast. Mom is still upset about last night.',
         },
         choices: [
-          c('a', '“Sorry about last night. Could we talk about making the cutoff 11 on school project nights?”', 'calm', 3, 'voice', 'She says she’ll think about it, and appreciates you asking like that. Real negotiation unlocked.'),
+          c('a', '“Sorry about last night. Could the cutoff be 11 on project nights?”', 'reactive', 3, 'voice', 'She says she’ll think about it, and appreciates you asking like that. Real negotiation unlocked.'),
           c('b', 'Give her the silent treatment.', 'avoid', 0, 'voice', 'The tension lasts all day. Nothing changes.'),
           c('c', '“Everyone else gets to stay up later.”', 'reactive', 1, 'empathy', 'Classic line. Classic response: “You’re not everyone else.”'),
           c('d', 'Make her coffee as a peace offering.', 'calm', 2, 'empathy', 'She smiles. The mood resets, even if the rule doesn’t.'),
@@ -61,16 +61,16 @@ export const HOME: Scenario[] = [
       {
         prompt: 'He’s standing right there. What’s your move?',
         choices: [
-          c('a', '“Hey, that’s mine. Ask me first next time, okay?”', 'calm', 3, 'boundaries', 'He rolls his eyes but says “fine.” Clear and short.'),
+          c('a', '“Hey, that’s mine. Ask me first next time, okay?”', 'reactive', 3, 'boundaries', 'He rolls his eyes but says “fine.” Clear and short.'),
           c('b', 'Yell for a parent.', 'reactive', 1, 'control', 'Mom yells at both of you for yelling.'),
           c('c', 'Sigh and let it go. Again.', 'avoid', 0, 'boundaries', 'He learns he can take anything. He will.'),
-          c('d', '“Nice hoodie. Rental fee is one snack back.”', 'humor', 2, 'boundaries', 'He laughs and hands back the snack. Message delivered.'),
+          c('d', '“Nice hoodie. Rental fee is one snack back.”', 'humor', 3, 'boundaries', 'He laughs and hands back the snack. Message delivered, no fight.'),
         ],
       },
       {
         prompt: 'Two days later, your charger is missing again.',
         choices: [
-          c('a', 'Make a deal: “If you need my charger, text me. If you take it without asking, you lose borrowing for a week.”', 'calm', 3, 'boundaries', 'He texts you next time. The system works.'),
+          c('a', 'Deal: “Text me before you borrow it. Take it without asking and you lose a week.”', 'reactive', 3, 'boundaries', 'He texts you next time. The system works.'),
           c('b', 'Take his stuff to get even.', 'reactive', 0, 'control', 'Now it’s a war, and you’re both in trouble.'),
           c('c', 'Buy a second charger and hide it.', 'avoid', 1, 'voice', 'Solves the charger. Doesn’t solve the brother.'),
           c('d', 'Ask a parent to help set a house rule about borrowing.', 'calm', 2, 'voice', 'It takes a family conversation, but now everyone knows the rule.'),
@@ -100,7 +100,7 @@ export const HOME: Scenario[] = [
       {
         prompt: 'You really want to go. What do you say?',
         choices: [
-          c('a', '“I know. Could I stay until 10:30 if I share my location and text you when I leave?”', 'calm', 3, 'voice', 'Dad thinks. “Who’s driving?” That’s not a no.'),
+          c('a', '“Could I stay till 10:30 if I share my location?”', 'reactive', 3, 'voice', 'Dad thinks. “Who’s driving?” That’s not a no.'),
           c('b', '“You’re literally ruining my life.”', 'reactive', 0, 'control', 'Dad: “Then it’s 8:30.”'),
           c('c', 'Say “okay” and plan to sneak out later.', 'avoid', 0, 'awareness', 'If you get caught, you lose way more than one party. Trust is hard to rebuild.'),
           c('d', '“What if I bring you back cake? Is cake a valid currency?”', 'humor', 2, 'voice', 'Dad smiles. “Cake helps. Tell me more about this party.”'),
@@ -112,7 +112,7 @@ export const HOME: Scenario[] = [
           c('a', 'Answer honestly and offer to have him pick you up.', 'calm', 3, 'voice', 'He agrees to 10:30. Being transparent earned you an extra 90 minutes.'),
           c('b', '“Why do you need to know everything?”', 'reactive', 0, 'empathy', 'He takes that as a sign something’s off. Curfew stays at 9.'),
           c('c', 'Give vague answers.', 'avoid', 1, 'voice', '“Then it’s 9.”'),
-          c('d', 'Answer, and ask what would help him feel okay about it.', 'calm', 3, 'empathy', 'He says “just text me at 10.” Deal made.'),
+          c('d', 'Answer, and ask what would help him feel okay about it.', 'calm', 2, 'empathy', 'He says “just text me at 10.” Good, but you didn’t offer a ride plan, so it stays at 10.'),
         ],
       },
     ],
@@ -139,10 +139,10 @@ export const HOME: Scenario[] = [
       {
         prompt: 'This is your chance. What do you say?',
         choices: [
-          c('a', '“Honestly, math isn’t going great. I got a D and I want to fix it.”', 'calm', 3, 'voice', 'Your parents are surprised, but they’re glad you told them first.'),
+          c('a', '“Math’s not going great. I got a D. I want to fix it.”', 'reactive', 3, 'voice', 'Your parents are surprised, but they’re glad you told them first.'),
           c('b', '“Fine.”', 'avoid', 0, 'voice', 'They find out from the portal. Now it’s the grade AND the hiding.'),
           c('c', '“Why are you always checking on me?”', 'reactive', 0, 'control', 'They get suspicious. Then they check the portal.'),
-          c('d', '“Math and I are going through a rough patch. We’re in couples counseling.”', 'humor', 2, 'voice', 'They laugh, then ask what’s going on. You tell them.'),
+          c('d', '“Math and I are going through a rough patch. We’re in couples counseling.”', 'humor', 3, 'voice', 'They laugh, then ask what’s going on. You tell them. The joke made the hard part easier to say.'),
         ],
       },
       {
@@ -151,7 +151,7 @@ export const HOME: Scenario[] = [
           c('a', 'Explain what’s hard, and ask about getting a tutor or going to office hours.', 'calm', 3, 'awareness', 'They help you set up extra help. You’re in it together now.'),
           c('b', 'Blame the teacher.', 'reactive', 1, 'awareness', 'Maybe the teacher is tough, but your parents want to hear your part.'),
           c('c', '“I don’t know.”', 'avoid', 1, 'awareness', 'They push harder. The conversation drags on.'),
-          c('d', 'Admit you stopped doing homework when it got confusing.', 'calm', 3, 'awareness', 'Honesty. They respect it, and now they can actually help.'),
+          c('d', 'Admit you stopped doing homework when it got confusing.', 'reactive', 3, 'awareness', 'Honesty. They respect it, and now they can actually help.'),
         ],
       },
     ],
@@ -181,19 +181,21 @@ export const HOME: Scenario[] = [
           c('a', 'Let your sister in. Put on a show together and say “this is grown-up stuff, it’s not our fault.”', 'calm', 3, 'empathy', 'She leans on you and relaxes a little. So do you.'),
           c('b', 'Go out there and yell at them to stop.', 'reactive', 1, 'control', 'They stop, but now everyone is upset, including you.'),
           c('c', 'Put your headphones on and ignore everything, including your sister.', 'avoid', 0, 'empathy', 'You block it out. She sits alone in the hall.'),
-          c('d', 'Make your sister laugh with your worst impression of the dog.', 'humor', 2, 'empathy', 'She giggles. Humor can be a real comfort.'),
+          c('d', 'Make your sister laugh with your worst impression of the dog.', 'humor', 3, 'empathy', 'She giggles and stops shaking. Making someone laugh in a scary moment is real comfort.'),
         ],
       },
       {
         prompt: 'The next day, you still feel heavy about it.',
         choices: [
-          c('a', 'Talk to one parent, calmly: “When you two argue, it stresses me out. Is everything okay?”', 'calm', 3, 'voice', 'Your mom hugs you and explains a little. She didn’t realize you could hear.'),
+          c('a', 'Tell one parent: “When you argue, it stresses me out. Is everything okay?”', 'reactive', 3, 'voice', 'Your mom hugs you and explains a little. She didn’t realize you could hear.'),
           c('b', 'Keep it all inside.', 'avoid', 1, 'awareness', 'It sits with you for days.'),
           c('c', 'Talk to the school counselor or another adult you trust.', 'calm', 3, 'boundaries', 'It helps to say it out loud to someone outside the house.'),
           c('d', 'Try to fix their problems yourself.', 'reactive', 0, 'boundaries', 'You can’t. It’s not your job, and trying makes you more stressed.'),
         ],
       },
     ],
+    sensitive: true,
+    careNote: 'This one is about stress at home when parents argue.',
     lesson: {
       skill: 'boundaries',
       title: 'Not yours to fix',
@@ -220,7 +222,7 @@ export const HOME: Scenario[] = [
           c('a', '“I did them at 6. These are from after. I can help clean them though.”', 'calm', 3, 'voice', 'Dad nods. “Okay, thanks.” Facts plus a helpful offer.'),
           c('b', '“It wasn’t ME! Why do I always get blamed?”', 'reactive', 0, 'control', 'Now it’s a whole thing. The dishes are still there.'),
           c('c', 'Just wash them and say nothing.', 'avoid', 1, 'voice', 'Peace kept. But next time, same thing.'),
-          c('d', '“The dishes have been framed, Dad. I have an alibi.”', 'humor', 2, 'voice', 'He laughs. “Okay, detective, who did it?”'),
+          c('d', '“The dishes have been framed, Dad. I have an alibi.”', 'humor', 3, 'voice', 'He laughs. “Okay, detective.” Facts come out, nobody’s mad.'),
         ],
       },
       {
@@ -229,7 +231,7 @@ export const HOME: Scenario[] = [
           c('a', '“It’s okay, let’s just do them together real quick.”', 'calm', 3, 'empathy', 'She grumbles, but helps. Dad is impressed.'),
           c('b', '“You’re literally such a liar.”', 'reactive', 0, 'control', 'Big fight. Everyone loses screen time.'),
           c('c', 'Leave it for Dad to figure out.', 'avoid', 1, 'voice', 'Dad sighs and does them himself.'),
-          c('d', 'Suggest a chore chart so it’s clear who does what.', 'calm', 3, 'voice', 'Dad loves it. No more dish mysteries.'),
+          c('d', 'Suggest a chore chart so it’s clear who does what.', 'calm', 2, 'voice', 'Dad likes the idea, but nobody follows the chart after week one.'),
         ],
       },
     ],

@@ -19,9 +19,9 @@ export const SKILLS: Record<SkillId, { name: string; short: string; color: strin
 export const SKILL_ORDER: SkillId[] = ['awareness', 'control', 'empathy', 'voice', 'boundaries'];
 
 export const TONES: Record<Tone, { label: string; style: string; color: string }> = {
-  calm: { label: 'Calm', style: 'Calm Captain', color: '#00f5ff' },
-  reactive: { label: 'Reactive', style: 'Spark Plug', color: '#ff4b89' },
-  avoid: { label: 'Avoidant', style: 'Ghost Mode', color: '#9aa6b2' },
+  calm: { label: 'Steady', style: 'Steady Hand', color: '#00f5ff' },
+  reactive: { label: 'Bold', style: 'Straight Shooter', color: '#ff4b89' },
+  avoid: { label: 'Step Back', style: 'Low-Key', color: '#9aa6b2' },
   humor: { label: 'Humor', style: 'Comic Relief', color: '#ffd166' },
 };
 

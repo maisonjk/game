@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { SCENARIOS_BY_WORLD, WORLDS } from '../data';
-import { levelProgress, levelTitle, nextScenario, scenarioOpen, worldAccessible, worldProgress } from '../lib/game';
+import { levelProgress, levelTitle, needsUnlock, nextScenario, scenarioOpen, worldAccessible, worldProgress } from '../lib/game';
 import { useGame } from '../lib/store';
 import { tap } from '../lib/haptics';
 import type { Scenario, WorldId } from '../types';
 import { Bar, Button, Card, Eyebrow, Icon, Sheet, Stars } from './ui';
 
-export default function MapScreen({ onPlay, onPaywall }: { onPlay: (s: Scenario) => void; onPaywall: () => void }) {
+export default function MapScreen({ onPlay, onPaywall }: { onPlay: (s: Scenario) => void; onPaywall: (w?: WorldId) => void }) {
   const { state } = useGame();
   const [openWorld, setOpenWorld] = useState<WorldId | null>(null);
   const next = nextScenario(state);
@@ -15,14 +15,14 @@ export default function MapScreen({ onPlay, onPaywall }: { onPlay: (s: Scenario)
   const allFreeDone = !next && !state.unlocked;
 
   return (
-    <div className="px-4 pt-5 pb-28 max-w-lg mx-auto">
+    <div className="px-5 pt-5 pb-32 max-w-lg mx-auto">
       <Eyebrow color="text-muted">Hey {state.name || 'player'}</Eyebrow>
       <h1 className="mt-1 font-display font-black text-[34px] leading-none uppercase tracking-tight">
         LV {lp.level} <span className="text-cyan neon-text-cyan">{levelTitle(lp.level)}</span>
       </h1>
       <div className="mt-3 flex items-center gap-3">
         <Bar pct={lp.pct} className="flex-1" color={state.auraColor} />
-        <span className="text-xs font-bold text-faint tabular-nums whitespace-nowrap">{lp.toNext} to LV {lp.level + 1}</span>
+        <span className="text-xs font-bold text-muted tabular-nums whitespace-nowrap">{lp.toNext} to LV {lp.level + 1}</span>
       </div>
 
       {/* Continue card */}
@@ -48,10 +48,10 @@ export default function MapScreen({ onPlay, onPaywall }: { onPlay: (s: Scenario)
 
       {allFreeDone && (
         <Card className="mt-6 p-5 border-gold/40" style={{ background: 'linear-gradient(135deg, #ffd16622, #161b2a 60%)' }}>
-          <div className="text-[11px] font-bold tracking-[0.2em] uppercase text-gold">Group Chat cleared</div>
-          <div className="mt-2 font-display font-black text-2xl uppercase leading-tight">4 more worlds are waiting</div>
-          <p className="mt-1.5 text-sm text-muted">24 more scenarios: school, friends, home, and online life.</p>
-          <Button variant="primary" className="mt-4 w-full" onClick={onPaywall}>
+          <div className="text-[11px] font-bold tracking-[0.2em] uppercase text-gold">Free scenarios cleared</div>
+          <div className="mt-2 font-display font-black text-2xl uppercase leading-tight">20 more are waiting</div>
+          <p className="mt-1.5 text-sm text-muted">Replay for 3 stars, keep your Daily Chaos streak, or unlock the rest of School, Friends, Home and Online.</p>
+          <Button variant="primary" className="mt-4 w-full" onClick={() => onPaywall()}>
             Unlock all worlds
           </Button>
         </Card>
@@ -71,15 +71,14 @@ export default function MapScreen({ onPlay, onPaywall }: { onPlay: (s: Scenario)
               key={w.id}
               onClick={() => {
                 tap();
-                if (access) setOpenWorld(w.id);
-                else onPaywall();
+                setOpenWorld(w.id);
               }}
               className="text-left rounded-3xl bg-panel border border-line p-4 flex items-center gap-4 active:scale-[0.99] transition anim-rise"
               style={{ animationDelay: `${i * 50}ms` }}
-              aria-label={`${w.title}. ${access ? `${pr.done} of ${pr.total} cleared` : 'Locked'}`}
+              aria-label={`${w.title}. ${pr.done} of ${pr.total} cleared${access ? '' : '. First scenario free'}`}
             >
-              <div className="w-14 h-14 rounded-2xl grid place-items-center shrink-0 border" style={{ color: access ? w.color : '#7c869c', borderColor: access ? `${w.color}55` : 'rgba(255,255,255,0.09)', background: access ? `${w.color}12` : 'transparent' }}>
-                <Icon name={access ? w.icon : 'Lock'} size={26} />
+              <div className="w-14 h-14 rounded-2xl grid place-items-center shrink-0 border" style={{ color: w.color, borderColor: `${w.color}55`, background: `${w.color}12` }}>
+                <Icon name={w.icon} size={26} />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
@@ -87,7 +86,7 @@ export default function MapScreen({ onPlay, onPaywall }: { onPlay: (s: Scenario)
                   {w.free && <span className="text-[9px] font-black tracking-widest px-1.5 py-0.5 rounded bg-cyan/15 text-cyan">FREE</span>}
                 </div>
                 <p className="text-[13px] text-muted leading-snug truncate">{w.tagline}</p>
-                {access ? (
+                {access || pr.done > 0 ? (
                   <div className="mt-2 flex items-center gap-2">
                     <Bar pct={pr.done / pr.total} color={w.color} className="flex-1 h-1.5" />
                     <span className="text-[11px] font-bold text-faint tabular-nums">
@@ -95,7 +94,7 @@ export default function MapScreen({ onPlay, onPaywall }: { onPlay: (s: Scenario)
                     </span>
                   </div>
                 ) : (
-                  <div className="mt-2 text-[11px] font-bold tracking-wider uppercase text-gold">6 scenarios · Unlock</div>
+                  <div className="mt-2 text-[11px] font-bold tracking-wider uppercase text-gold">1 free · 5 in full game</div>
                 )}
               </div>
               <Icon name="ChevronRight" size={20} className="text-faint" />
@@ -104,12 +103,12 @@ export default function MapScreen({ onPlay, onPaywall }: { onPlay: (s: Scenario)
         })}
       </div>
 
-      <WorldSheet worldId={openWorld} onClose={() => setOpenWorld(null)} onPlay={(s) => { setOpenWorld(null); onPlay(s); }} />
+      <WorldSheet worldId={openWorld} onClose={() => setOpenWorld(null)} onPlay={(s) => { setOpenWorld(null); onPlay(s); }} onPaywall={(w) => { setOpenWorld(null); onPaywall(w); }} />
     </div>
   );
 }
 
-function WorldSheet({ worldId, onClose, onPlay }: { worldId: WorldId | null; onClose: () => void; onPlay: (s: Scenario) => void }) {
+function WorldSheet({ worldId, onClose, onPlay, onPaywall }: { worldId: WorldId | null; onClose: () => void; onPlay: (s: Scenario) => void; onPaywall: (w: WorldId) => void }) {
   const { state } = useGame();
   if (!worldId) return null;
   const w = WORLDS.find((x) => x.id === worldId)!;
@@ -124,17 +123,19 @@ function WorldSheet({ worldId, onClose, onPlay }: { worldId: WorldId | null; onC
       <div className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-2 pb-6">
         {list.map((s, i) => {
           const open = scenarioOpen(state, s);
+          const paid = needsUnlock(state, s);
           const rec = state.records[s.id];
           return (
             <button
               key={s.id}
-              disabled={!open}
+              disabled={!open && !paid}
               onClick={() => {
                 tap();
-                onPlay(s);
+                if (paid) onPaywall(worldId);
+                else onPlay(s);
               }}
               className="text-left rounded-2xl border border-line bg-panel-2 p-4 flex items-center gap-3 disabled:opacity-45 active:scale-[0.99] transition"
-              aria-label={`${s.title}${open ? '' : ', locked. Clear the previous scenario first'}`}
+              aria-label={`${s.title}${open ? '' : paid ? ', in the full game' : ', locked. Clear the previous scenario first'}`}
             >
               <span className="w-9 h-9 rounded-xl grid place-items-center font-display font-black text-sm shrink-0" style={{ background: rec ? `${w.color}22` : 'rgba(255,255,255,0.05)', color: rec ? w.color : '#a3adc2' }}>
                 {open ? i + 1 : <Icon name="Lock" size={16} />}
@@ -143,7 +144,7 @@ function WorldSheet({ worldId, onClose, onPlay }: { worldId: WorldId | null; onC
                 <div className="font-display font-bold text-base leading-tight">{s.title}</div>
                 <div className="text-[13px] text-muted truncate">{s.hook}</div>
               </div>
-              {rec ? <Stars n={rec.stars} size={14} /> : open ? <Icon name="Play" size={18} className="text-cyan" /> : null}
+              {rec ? (rec.plays === 0 ? <span className="text-xs text-muted">Skipped</span> : <Stars n={rec.stars} size={14} />) : open ? <Icon name="Play" size={18} className="text-cyan" /> : paid ? <span className="text-[10px] font-black tracking-widest text-gold">FULL</span> : null}
             </button>
           );
         })}

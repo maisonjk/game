@@ -2,8 +2,8 @@
 
 An EQ game for teens (13+). Players work through 30 handwritten, branching social scenarios across five worlds, plus a Daily Chaos quick-play with streaks. Every choice trains one of five skills: Self-Awareness, Self-Control, Empathy, Communication, Boundaries.
 
-- **Free:** Group Chat world (6 scenarios) + Daily Chaos
-- **Paid:** one-time "Unlock All Worlds" ($4.99, non-consumable) for School Halls, Friend Zone, Home Base, Online Life
+- **Free:** Group Chat world (6 scenarios), the first scenario of every other world, and Daily Chaos
+- **Paid:** one-time "Unlock All Worlds" ($4.99, non-consumable) for the remaining 20 scenarios
 - **Privacy:** no accounts, no ads, no analytics. Progress lives on the device.
 
 Stack: React 19 + Vite + Tailwind 4, wrapped for iOS with Capacitor 8. Purchases via RevenueCat.
@@ -46,11 +46,11 @@ src/data/        30 scenarios (world-*.ts), 30 daily chaos (daily.ts), worlds/sk
 src/lib/game.ts  levels, scoring, streaks, unlocks, badges
 src/lib/store.tsx  save/load (Capacitor Preferences on iOS, localStorage on web)
 src/lib/purchases.ts  RevenueCat one-time unlock + restore
-src/components/  screens (Map, Daily, Stats, Badges, Profile), ScenarioPlayer, Paywall, Settings
+src/components/  Play (MapScreen), Daily, You (profile, skills, play style, badges), ScenarioPlayer, Paywall, Settings
 public/          privacy.html, terms.html, support.html (bundled in the app and on the web)
 resources/       icon + splash sources (regenerate with `npx @capacitor/assets generate --ios --assetPath resources`)
 ```
 
 ## Adding a scenario
 
-Add an object to the right `src/data/world-*.ts` file. Each scenario has story `lines`, two `beats` with 3–4 choices (each choice: tone, score 0–3, skill, result text), and a `lesson`. Choices are shuffled at play time, so order doesn't matter. Use `{name}` to insert the player's nickname.
+Add an object to the right `src/data/world-*.ts` file, then run `npm run lint`: it checks that no single tone (Steady, Bold, Step Back, Humor) holds more than 40% of the best moves and that the longest option isn't usually the right one. Mark heavy topics `sensitive: true` with a `careNote`: they get a skip option, no score, and the crisis resources card. Each scenario has story `lines`, two `beats` with 3–4 choices (each choice: tone, score 0–3, skill, result text), and a `lesson`. Choices are shuffled at play time, so order doesn't matter. Use `{name}` to insert the player's nickname.

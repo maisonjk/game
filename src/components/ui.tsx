@@ -26,7 +26,7 @@ export function Button({
 }) {
   const styles: Record<BtnVariant, string> = {
     primary: 'bg-cyan text-ink shadow-[0_0_24px_rgba(0,245,255,0.35)] active:shadow-none',
-    pink: 'bg-pink text-white shadow-[0_0_24px_rgba(255,75,137,0.35)] active:shadow-none',
+    pink: 'bg-pink text-ink shadow-[0_0_24px_rgba(255,75,137,0.35)] active:shadow-none',
     ghost: 'bg-white/5 text-text border border-line',
     outline: 'border border-cyan/50 text-cyan bg-transparent',
   };
@@ -81,7 +81,7 @@ export function Stars({ n, size = 16, max = 3 }: { n: number; size?: number; max
   );
 }
 
-export function Sheet({ open, onClose, children, title, tall }: { open: boolean; onClose: () => void; children: React.ReactNode; title?: string; tall?: boolean }) {
+export function Sheet({ open, onClose, children, title, tall, footer }: { open: boolean; onClose: () => void; children: React.ReactNode; title?: string; tall?: boolean; footer?: React.ReactNode }) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
@@ -96,12 +96,13 @@ export function Sheet({ open, onClose, children, title, tall }: { open: boolean;
         <div className="flex items-center justify-between px-5 pt-4 pb-2 shrink-0">
           <div className="w-10" />
           <div className="w-10 h-1.5 rounded-full bg-white/15" />
-          <button aria-label="Close" onClick={onClose} className="w-10 h-10 grid place-items-center rounded-full bg-white/5 text-muted active:scale-95">
+          <button aria-label="Close" onClick={onClose} className="w-11 h-11 grid place-items-center rounded-full bg-white/5 text-muted active:scale-95">
             <X size={18} />
           </button>
         </div>
         {title && <h2 className="px-6 pb-3 font-display font-extrabold text-2xl uppercase tracking-tight shrink-0">{title}</h2>}
-        <div className="overflow-y-auto no-scrollbar px-6 pb-safe flex-1">{children}</div>
+        <div className={`overflow-y-auto no-scrollbar px-6 flex-1 ${footer ? 'pb-4' : 'pb-safe'}`}>{children}</div>
+        {footer && <div className="shrink-0 px-6 pt-3 pb-safe border-t border-line bg-panel">{footer}</div>}
       </div>
     </div>
   );
@@ -115,7 +116,7 @@ export function Toast({ children, onDone, ms = 2600 }: { children: React.ReactNo
     return () => clearTimeout(t);
   }, [ms]);
   return (
-    <div className="fixed left-1/2 -translate-x-1/2 z-[80] anim-pop" style={{ top: 'calc(max(var(--sat), 12px) + 64px)' }} role="status">
+    <div className="fixed left-1/2 -translate-x-1/2 z-[80] anim-pop w-max max-w-[90vw]" style={{ bottom: 'calc(max(var(--sab), 12px) + 84px)' }} role="status">
       <div className="glass rounded-2xl px-4 py-3 shadow-2xl flex items-center gap-3 text-sm font-semibold">{children}</div>
     </div>
   );

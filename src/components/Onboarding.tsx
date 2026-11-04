@@ -52,6 +52,7 @@ export default function Onboarding() {
               <p className="mt-5 text-muted text-[17px] leading-relaxed">
                 Play through group chat drama, friend fights, and awkward moments. Make the call. See what happens. Level up the skills that actually matter.
               </p>
+              <p className="mt-3 text-[13px] text-muted">A game for practicing social skills. Not therapy or counseling.</p>
               <div className="mt-8 grid grid-cols-5 gap-2">
                 {SKILL_ORDER.map((k) => (
                   <div key={k} className="rounded-xl border border-line bg-panel py-2.5 text-center">
@@ -97,12 +98,12 @@ export default function Onboarding() {
 
         {step === 2 && (
           <div key="s2" className="flex-1 flex flex-col anim-rise">
-            <div className="pt-8">
+            <div className="pt-6">
               <Eyebrow>Pick your archetype</Eyebrow>
-              <h2 className="mt-2 font-display font-black text-4xl uppercase tracking-tight leading-none">How do you usually play it?</h2>
+              <h2 className="mt-2 font-display font-black text-[32px] uppercase tracking-tight leading-none">How do you usually play it?</h2>
               <p className="mt-3 text-muted">Go with your gut. The game will show you how you actually play.</p>
             </div>
-            <div className="mt-6 grid gap-3 flex-1 content-start">
+            <div className="mt-5 grid gap-2 flex-1 content-start pb-4">
               {ARCHETYPES.map((a) => {
                 const on = arch === a.id;
                 return (
@@ -113,30 +114,32 @@ export default function Onboarding() {
                       tap();
                       setArch(a.id);
                     }}
-                    className="text-left rounded-2xl border p-4 flex items-center gap-4 transition active:scale-[0.98]"
+                    className="text-left rounded-2xl border p-3 flex items-center gap-3 transition active:scale-[0.98]"
                     style={{
                       borderColor: on ? a.color : 'rgba(255,255,255,0.09)',
                       background: on ? `${a.color}14` : '#161b2a',
                       boxShadow: on ? `0 0 24px ${a.color}33` : 'none',
                     }}
                   >
-                    <span className="text-3xl" aria-hidden>
+                    <span className="text-2xl" aria-hidden>
                       {a.emoji}
                     </span>
                     <span className="flex-1">
-                      <span className="block font-display font-extrabold text-lg" style={{ color: on ? a.color : undefined }}>
+                      <span className="block font-display font-extrabold text-base" style={{ color: on ? a.color : undefined }}>
                         {a.title}
                       </span>
-                      <span className="block text-sm text-muted leading-snug">{a.description}</span>
+                      <span className="block text-[13px] text-muted leading-snug">{a.description}</span>
                     </span>
                     {on && <Icon name="Check" size={20} className="text-text" />}
                   </button>
                 );
               })}
             </div>
-            <Button className="w-full mt-4 mb-2" disabled={!arch} onClick={finish}>
-              Enter the game
+            <div className="sticky bottom-0 -mx-6 px-6 pt-3 pb-2 bg-gradient-to-t from-ink via-ink to-ink/0">
+            <Button className="w-full" disabled={!arch} onClick={finish}>
+              Play my first scenario
             </Button>
+            </div>
           </div>
         )}
       </div>

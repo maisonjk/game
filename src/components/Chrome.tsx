@@ -28,7 +28,7 @@ export function Header({ onProfile }: { onProfile: () => void }) {
       <div className="h-14 px-4 flex items-center justify-between max-w-lg mx-auto">
         <div className="flex items-center gap-2">
           <Logo size={26} />
-          <span className="font-display font-black text-lg tracking-tight uppercase">Social Levels</span>
+          <span className="font-display font-black text-lg tracking-tight uppercase whitespace-nowrap max-[359px]:hidden">Social Levels</span>
         </div>
         <button
           onClick={() => {
@@ -36,10 +36,10 @@ export function Header({ onProfile }: { onProfile: () => void }) {
             onProfile();
           }}
           aria-label={`Level ${lp.level}, ${state.aura} aura. Open profile`}
-          className="flex items-center gap-2 pl-3 pr-1.5 h-9 rounded-full bg-white/5 border border-line active:scale-95 transition"
+          className="flex items-center gap-2 pl-3 pr-1.5 h-9 my-1 rounded-full whitespace-nowrap bg-white/5 border border-line active:scale-95 transition"
         >
           <span className="font-display font-extrabold text-sm text-cyan tabular-nums">{state.aura}</span>
-          <span className="text-[10px] font-bold text-faint tracking-widest">AURA</span>
+          <span className="text-[10px] font-bold text-muted tracking-widest">AURA</span>
           <span className="h-6 px-2 rounded-full grid place-items-center text-[11px] font-display font-black text-ink" style={{ background: state.auraColor }}>
             LV {lp.level}
           </span>
@@ -50,17 +50,15 @@ export function Header({ onProfile }: { onProfile: () => void }) {
 }
 
 const TABS: { id: TabId; label: string; icon: string }[] = [
-  { id: 'map', label: 'Map', icon: 'Map' },
-  { id: 'stats', label: 'Stats', icon: 'BarChart3' },
+  { id: 'map', label: 'Play', icon: 'Map' },
   { id: 'daily', label: 'Daily', icon: 'Zap' },
-  { id: 'badges', label: 'Badges', icon: 'Award' },
-  { id: 'profile', label: 'Me', icon: 'User' },
+  { id: 'you', label: 'You', icon: 'User' },
 ];
 
 export function BottomNav({ tab, onTab, dailyDue }: { tab: TabId; onTab: (t: TabId) => void; dailyDue: boolean }) {
   return (
     <nav className="fixed bottom-0 inset-x-0 z-40 bg-ink/90 backdrop-blur-xl border-t border-line pb-safe" aria-label="Main">
-      <div className="max-w-lg mx-auto grid grid-cols-5 h-16">
+      <div className="max-w-lg mx-auto grid grid-cols-3 h-16">
         {TABS.map((t) => {
           const active = tab === t.id;
           if (t.id === 'daily') {
@@ -82,21 +80,21 @@ export function BottomNav({ tab, onTab, dailyDue }: { tab: TabId; onTab: (t: Tab
                 >
                   <Icon name="Zap" size={26} className={active ? 'fill-white' : 'fill-pink/30'} />
                 </span>
-                {dailyDue && <span className="absolute top-0 right-[26%] w-3 h-3 rounded-full bg-gold border-2 border-ink" aria-label="New daily available" />}
-                <span className={`text-[10px] mt-0.5 font-bold tracking-wider uppercase ${active ? 'text-pink' : 'text-faint'}`}>Daily</span>
+                {dailyDue && <span className="absolute top-0 right-[34%] w-3 h-3 rounded-full bg-gold border-2 border-ink" aria-label="New daily available" />}
+                <span className={`text-[10px] mt-0.5 font-bold tracking-wider uppercase ${active ? 'text-pink' : 'text-muted'}`}>Daily</span>
               </button>
             );
           }
           return (
             <button
               key={t.id}
-              aria-label={t.label}
+              aria-label={t.id === 'map' ? 'Play: worlds map' : t.label}
               aria-current={active ? 'page' : undefined}
               onClick={() => {
                 tap();
                 onTab(t.id);
               }}
-              className={`flex flex-col items-center justify-center gap-1 transition ${active ? 'text-cyan' : 'text-faint'}`}
+              className={`flex flex-col items-center justify-center gap-1 transition ${active ? 'text-cyan' : 'text-muted'}`}
             >
               <Icon name={t.icon} size={22} strokeWidth={active ? 2.6 : 2} />
               <span className="text-[10px] font-bold tracking-wider uppercase">{t.label}</span>

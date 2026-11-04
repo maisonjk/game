@@ -19,7 +19,7 @@ export const ONLINE: Scenario[] = [
       {
         prompt: 'What do you do with the comment?',
         choices: [
-          c('a', 'Delete the comment and block the account.', 'calm', 3, 'boundaries', 'Gone. Your page, your rules. That took two seconds.'),
+          c('a', 'Delete the comment and block the account.', 'avoid', 3, 'boundaries', 'Gone. Your page, your rules. That took two seconds.'),
           c('b', 'Reply: “at least I have a face on my profile, coward.”', 'reactive', 0, 'control', 'They reply back. Then their friends do. Now you have 30 mean comments.'),
           c('c', 'Delete your whole video.', 'avoid', 1, 'awareness', 'One stranger just decided what you get to post.'),
           c('d', 'Pin a comment: “thanks for the engagement 💅”', 'humor', 2, 'control', 'Your friends love it. Risky, but it worked this time.'),
@@ -31,7 +31,7 @@ export const ONLINE: Scenario[] = [
           c('a', 'Remind yourself: 42 people liked it, 1 stranger didn’t. Text a friend about it.', 'calm', 3, 'awareness', 'Your friend replies “that video was SO good.” Perspective restored.'),
           c('b', 'Keep checking their profile to see who they are.', 'avoid', 0, 'awareness', 'An hour gone. Feeling worse.'),
           c('c', 'Post a long story about haters.', 'reactive', 1, 'control', 'It gets attention, but now the hater knows they got to you.'),
-          c('d', 'Go practice and make an even better video.', 'calm', 3, 'control', 'Best revenge. Your next one hits 200 likes.'),
+          c('d', 'Log off and go practice.', 'avoid', 3, 'control', 'Best revenge. Your next one hits 200 likes.'),
         ],
       },
     ],
@@ -59,7 +59,7 @@ export const ONLINE: Scenario[] = [
       {
         prompt: 'Your face is hot. What’s the move?',
         choices: [
-          c('a', 'Wait 10 minutes before doing anything.', 'calm', 3, 'control', 'After 10 minutes it feels way less serious. It’s a pizza opinion.'),
+          c('a', 'Wait 10 minutes before doing anything.', 'avoid', 3, 'control', 'After 10 minutes it feels way less serious. It’s a pizza opinion.'),
           c('b', 'Fire back with a roast about his haircut.', 'reactive', 0, 'control', 'He has more followers. You lose round two too.'),
           c('c', 'Delete your post.', 'avoid', 1, 'awareness', 'It’s gone, but the screenshot isn’t.'),
           c('d', '“pineapple and I will not be silenced 🍍”', 'humor', 3, 'voice', 'People love it. You turned a dunk into a bit.'),
@@ -68,7 +68,7 @@ export const ONLINE: Scenario[] = [
       {
         prompt: 'Jake DMs you: “lol no hard feelings right?”',
         choices: [
-          c('a', '“Nah we’re good. Just keep the music shots out of it 😂”', 'calm', 3, 'boundaries', 'He says “fair.” Joke boundaries set, friendship fine.'),
+          c('a', '“Nah we’re good. Just keep the music shots out of it 😂”', 'reactive', 3, 'boundaries', 'He says “fair.” Joke boundaries set, friendship fine.'),
           c('b', 'Leave him on read forever.', 'avoid', 1, 'voice', 'It’s awkward at school for a week.'),
           c('c', '“yes hard feelings.”', 'reactive', 1, 'voice', 'Honest, at least. He apologizes.'),
           c('d', '“None. But my playlist is elite and I’ll prove it.”', 'humor', 2, 'voice', 'You send him a song. He actually likes it.'),
@@ -99,16 +99,16 @@ export const ONLINE: Scenario[] = [
       {
         prompt: 'You don’t want to do this. What do you say?',
         choices: [
-          c('a', '“I’m gonna pass on that one. Not trying to drag her. Got any other ideas?”', 'calm', 3, 'boundaries', 'Bella: “ok fair, what about a dance trend?” Easy.'),
+          c('a', '“I’ll pass on that one. Got other ideas?”', 'reactive', 3, 'boundaries', 'Bella: “ok fair, what about a dance trend?” Easy.'),
           c('b', '“That’s literally so mean, why would you even think of that?”', 'reactive', 1, 'empathy', 'Bella gets embarrassed and defensive.'),
           c('c', '“Maybe… let me think about it.”', 'avoid', 0, 'voice', 'Bella hears “yes.” She starts planning it.'),
-          c('d', '“What if we prank-call my dog instead? He’ll be way more dramatic.”', 'humor', 2, 'boundaries', 'Bella laughs. The dog video gets 2K views.'),
+          c('d', '“What if we prank-call my dog instead? He’ll be way more dramatic.”', 'humor', 3, 'boundaries', 'Bella laughs. The dog video gets 2K views and nobody gets hurt.'),
         ],
       },
       {
         prompt: 'Bella says: “you’re no fun. It’s just a joke.”',
         choices: [
-          c('a', '“Still a no for me. I’m down for anything else though.”', 'calm', 3, 'boundaries', 'She drops it. Holding steady kept you from something you’d regret.'),
+          c('a', '“Still a no for me. I’m down for anything else though.”', 'reactive', 3, 'boundaries', 'She drops it. Holding steady kept you from something you’d regret.'),
           c('b', 'Give in so she won’t be annoyed.', 'avoid', 0, 'boundaries', 'The video goes up. Your ex-friend sees it. It gets ugly.'),
           c('c', '“It’s only a joke if she’s laughing too.”', 'calm', 3, 'empathy', 'Bella pauses: “…ok yeah. fair.”'),
           c('d', '“Then find someone else.”', 'reactive', 1, 'voice', 'True, but now Bella is annoyed at you.'),
@@ -138,7 +138,7 @@ export const ONLINE: Scenario[] = [
       {
         prompt: 'What do you do?',
         choices: [
-          c('a', 'Notice it: “I’m exhausted and this isn’t even fun anymore.” Put the phone across the room.', 'calm', 3, 'awareness', 'You fall asleep in 10 minutes. Your brain thanks you at 8 AM.'),
+          c('a', 'Phone across the room. You’re done.', 'avoid', 3, 'awareness', 'You fall asleep in 10 minutes. Your brain thanks you at 8 AM.'),
           c('b', 'Get mad at yourself and keep scrolling anyway.', 'reactive', 0, 'control', 'Guilt-scrolling is the worst kind. It’s now 2 AM.'),
           c('c', 'Tell yourself “just 5 more minutes.”', 'avoid', 1, 'control', 'It’s never 5 minutes.'),
           c('d', 'Send the chat “goodnight losers 💤” and log off.', 'humor', 3, 'boundaries', 'They send hearts. You sleep.'),
@@ -147,7 +147,7 @@ export const ONLINE: Scenario[] = [
       {
         prompt: 'The next night, you want to avoid this again.',
         choices: [
-          c('a', 'Charge your phone outside your room.', 'calm', 3, 'boundaries', 'Out of reach, out of mind. Sleep improves.'),
+          c('a', 'Charge your phone outside your room.', 'avoid', 3, 'boundaries', 'Out of reach, out of mind. Sleep improves.'),
           c('b', 'Set a screen time limit on the apps.', 'calm', 3, 'control', 'You tap “ignore limit” a few times, but it helps more than you expected.'),
           c('c', 'Do nothing. You’ll just be more disciplined.', 'avoid', 1, 'awareness', 'Willpower at 1 AM is pretty much zero.'),
           c('d', 'Delete every app forever.', 'reactive', 1, 'control', 'Lasts 2 days. Extreme rules usually break.'),
@@ -179,7 +179,7 @@ export const ONLINE: Scenario[] = [
       {
         prompt: 'Something feels off. What do you do?',
         choices: [
-          c('a', 'Don’t share anything. Block and report the account.', 'calm', 3, 'boundaries', 'Done. Your gut was right to notice: new account, personal questions, asking for photos.'),
+          c('a', 'Block and report. Share nothing.', 'avoid', 3, 'boundaries', 'Done. Your gut was right to notice: new account, personal questions, asking for photos.'),
           c('b', 'Tell them your school but not your name.', 'avoid', 0, 'boundaries', 'Your school is enough to find you. Never share location details with strangers.'),
           c('c', '“Who even are you? Creep.”', 'reactive', 1, 'control', 'You’re right to be suspicious, but replying keeps the conversation going. Blocking ends it.'),
           c('d', 'Joke around with them a bit to see if they’re legit.', 'humor', 0, 'boundaries', 'People who mean harm are often friendly on purpose. You don’t owe them a test.'),
@@ -188,13 +188,15 @@ export const ONLINE: Scenario[] = [
       {
         prompt: 'You blocked them, but you still feel weird about it.',
         choices: [
-          c('a', 'Tell a parent or another trusted adult what happened.', 'calm', 3, 'voice', 'They thank you for telling them and help you check your privacy settings.'),
+          c('a', 'Tell a parent or trusted adult.', 'reactive', 3, 'voice', 'They thank you for telling them and help you check your privacy settings.'),
           c('b', 'Keep it to yourself. Nothing happened, right?', 'avoid', 1, 'voice', 'It was right to block, and telling someone helps you feel less alone with the weird feeling.'),
-          c('c', 'Set your account to private.', 'calm', 3, 'boundaries', 'Strangers can’t see your videos anymore. Smart.'),
+          c('c', 'Set your account to private.', 'avoid', 3, 'boundaries', 'Strangers can’t see your videos anymore. Smart.'),
           c('d', 'Post about it to warn your friends.', 'calm', 2, 'voice', 'Thoughtful, though it’s best to also tell an adult who can help report it.'),
         ],
       },
     ],
+    sensitive: true,
+    careNote: 'This one is about staying safe when a stranger messages you.',
     lesson: {
       skill: 'boundaries',
       title: 'Trust the weird feeling',
@@ -219,18 +221,18 @@ export const ONLINE: Scenario[] = [
       {
         prompt: 'The lobby is listening. What do you say?',
         choices: [
-          c('a', '“Yeah I was off that round. Let’s run it back.”', 'calm', 3, 'control', 'Vex goes quiet. Hard to stay mad at someone who doesn’t take the bait.'),
+          c('a', '“Yeah I was off that round. Let’s run it back.”', 'calm', 2, 'control', 'Vex: “yeah you were trash.” Owning it is mature, but he just used it as ammo.'),
           c('b', '“You literally went 2 and 14, sit down.”', 'reactive', 1, 'control', 'The lobby goes “ooooh.” Now it’s a whole fight for the next match too.'),
-          c('c', 'Leave the lobby.', 'avoid', 2, 'boundaries', 'Sometimes leaving is the right call. You don’t owe anyone your time.'),
-          c('d', '“Uninstalling my aim, keeping the vibes.”', 'humor', 2, 'control', 'Someone laughs. Vex says “lol ok.” Tension down.'),
+          c('c', 'Leave the lobby.', 'avoid', 3, 'boundaries', 'You don’t owe a stranger a debate. The next lobby is chill.'),
+          c('d', '“Uninstalling my aim, keeping the vibes.”', 'humor', 3, 'control', 'The lobby laughs. Nothing for Vex to grab.'),
         ],
       },
       {
         prompt: 'Next match, Vex is still being toxic.',
         choices: [
-          c('a', 'Mute him and focus on your game.', 'calm', 3, 'boundaries', 'Your next match is your best one. Peace and quiet helps.'),
+          c('a', 'Mute him and focus on your game.', 'avoid', 3, 'boundaries', 'Your next match is your best one. Peace and quiet helps.'),
           c('b', 'Trash talk him all match.', 'reactive', 0, 'control', 'You both play worse. You lose again.'),
-          c('c', 'Report him if it keeps going.', 'calm', 3, 'boundaries', 'That’s what the report button is for. You don’t have to take abuse to play a game.'),
+          c('c', 'Report him if it keeps going.', 'reactive', 3, 'boundaries', 'That’s what the report button is for. You don’t have to take abuse to play a game.'),
           c('d', 'Quit gaming for the night.', 'avoid', 2, 'awareness', 'Fair. If it’s not fun anymore, logging off is a good choice.'),
         ],
       },

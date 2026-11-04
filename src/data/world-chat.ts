@@ -20,10 +20,10 @@ export const CHAT: Scenario[] = [
       {
         prompt: 'Everyone is watching the chat. What’s your first move?',
         choices: [
-          c('a', '“Wasn’t me. I talked to her about the bio test. Happy to figure out what happened though.”', 'calm', 3, 'voice', 'The typing dots stop. Jordan replies “ok fair.” You stated the facts without attacking anyone.'),
+          c('a', '“Wasn’t me. I was asking her about the bio test.”', 'calm', 3, 'voice', 'The typing dots stop. Jordan replies “ok fair.” You stated the facts without attacking anyone.'),
           c('b', '“Are you serious?? You always blame me for everything 🙄”', 'reactive', 0, 'control', 'Kai fires back. Now the chat is about your attitude, not the party. Two people mute the thread.'),
           c('c', 'Leave the chat without saying anything.', 'avoid', 1, 'boundaries', 'Your silence reads as guilt. Someone posts “yikes, guess that confirms it.”'),
-          c('d', '“If I leaked it I’d at least have made it dramatic. Wasn’t me tho.”', 'humor', 2, 'voice', 'A couple of laughs. The tension drops, but Kai isn’t fully convinced you’re serious.'),
+          c('d', '“If I leaked it I’d at least have made it dramatic. Wasn’t me tho.”', 'humor', 3, 'voice', 'Laughs in the chat. Jordan: “ok fair, you’d be way messier.” The tension breaks and nobody’s pointing at you anymore.'),
         ],
       },
       {
@@ -33,7 +33,7 @@ export const CHAT: Scenario[] = [
           avoid: 'An hour later, Kai DMs you: “so was it you or not?” What now?',
         },
         choices: [
-          c('a', '“All good. It sucked to get blamed in front of everyone, so next time just ask me first?”', 'calm', 3, 'boundaries', 'Kai sends a 🫡. You kept the friendship and set a clear expectation for next time.'),
+          c('a', '“All good. It sucked to get blamed in front of everyone, so next time just ask me first?”', 'reactive', 3, 'boundaries', 'Kai sends a 🫡. You kept the friendship and set a clear expectation for next time.'),
           c('b', '“Whatever. Doesn’t matter.”', 'avoid', 1, 'awareness', 'It does matter to you, and it sits in your chest the rest of the night.'),
           c('c', 'Screenshot the DM and post it in the group: “see? told you.”', 'reactive', 0, 'empathy', 'Kai feels exposed. You were right about the party, but now you’re the one who made it public.'),
           c('d', '“Apology accepted. You’re buying the cake now tho 🎂”', 'humor', 2, 'empathy', 'Kai laughs and agrees. It’s fixed, though you never said it actually hurt.'),
@@ -64,16 +64,16 @@ export const CHAT: Scenario[] = [
       {
         prompt: 'Your brain is writing a whole story about why they ignored you. What do you do?',
         choices: [
-          c('a', 'Notice the spiral. Tell yourself: “I don’t actually know why yet.”', 'calm', 3, 'awareness', 'The knot in your stomach loosens a little. You still want an answer, but you’re not at war.'),
+          c('a', 'Tell yourself you don’t actually know why yet.', 'calm', 2, 'awareness', 'You feel steadier. Still no reply, though. Nothing’s changed yet.'),
           c('b', '“wow ok. nice to know where I stand.”', 'reactive', 0, 'control', 'Riley sees it at the mall and feels attacked for something they didn’t know was urgent.'),
           c('c', 'Post a vague sad song on your story so they’ll notice.', 'avoid', 1, 'voice', 'Three people react. Riley isn’t one of them. You’re still waiting.'),
-          c('d', '“hellooo did my message get abducted by aliens 👽”', 'humor', 2, 'voice', 'Light nudge. Riley replies “omg sorry!! one sec.”'),
+          c('d', '“hellooo did my message get abducted by aliens 👽”', 'humor', 3, 'voice', 'A light nudge with zero guilt trip. Riley: “omg sorry!! one sec.”'),
         ],
       },
       {
         prompt: 'Riley finally replies: “sorry I was with my cousin and forgot to answer. what happened?”',
         choices: [
-          c('a', 'Tell them about the team, and that it stung a little to wait.', 'calm', 3, 'voice', 'Riley calls you right away. Being honest about both things made the conversation real.'),
+          c('a', 'Tell them about the team, and that it stung a little to wait.', 'reactive', 3, 'voice', 'Riley calls you right away. Being honest about both things made the conversation real.'),
           c('b', '“never mind, it’s fine.”', 'avoid', 1, 'awareness', 'Riley believes you. Now you’re upset about the team AND feel unheard.'),
           c('c', '“forgot? cool. guess I’m not a priority.”', 'reactive', 0, 'empathy', 'Riley gets defensive. The talk you needed turns into a fight about texting.'),
           c('d', 'Tell them about the team, skip the part about waiting.', 'calm', 2, 'voice', 'You get the support you needed. The waiting thing still bugs you a bit, but it’s small.'),
@@ -114,7 +114,7 @@ export const CHAT: Scenario[] = [
       {
         prompt: 'Later, Sam DMs you: “bro it was just a joke, why are you mad at me?”',
         choices: [
-          c('a', '“I said something mean, that’s on me. But screenshotting private chats isn’t cool. Please don’t do that with my stuff.”', 'calm', 3, 'boundaries', 'Sam says “fair.” You owned your part and named theirs.'),
+          c('a', '“That was on me. But please don’t screenshot my private chats.”', 'reactive', 3, 'boundaries', 'Sam says “fair.” You owned your part and named theirs.'),
           c('b', 'Screenshot something embarrassing Sam said and post it back.', 'reactive', 0, 'control', 'Now everyone’s stuff is getting posted. The chat turns into a war.'),
           c('c', 'Stop talking to Sam completely without explaining.', 'avoid', 1, 'voice', 'Sam doesn’t know what happened. Things get weird and never really get fixed.'),
           c('d', '“It’s fine.” (It’s not fine.)', 'avoid', 1, 'awareness', 'Sam thinks screenshots are okay. It’ll probably happen again.'),
@@ -126,6 +126,49 @@ export const CHAT: Scenario[] = [
       title: 'Repair beats defend',
       body: 'When something you said hurts someone, explaining why you said it rarely helps. A fast, specific apology to the person who got hurt does more than any comeback in the group.',
       tryThis: '“I said something unfair about you. I’m sorry. You didn’t deserve that.”',
+    },
+  },
+  {
+    id: 'chat-6',
+    world: 'chat',
+    title: 'The 1 A.M. Message',
+    hook: 'A friend sends something heavy late at night.',
+    chaos: 5,
+    mode: 'chat',
+    place: 'Ava 🌙',
+    lines: [
+      { from: 'Ava', text: 'are you up' },
+      { from: 'Ava', text: 'idk everything just feels really bad lately' },
+      { from: 'Ava', text: 'like nobody would even notice if I disappeared' },
+      { from: '', text: 'Your heart drops. You’re not sure what to say.' },
+    ],
+    beats: [
+      {
+        prompt: 'Ava is hurting. What’s your first reply?',
+        choices: [
+          c('a', '“I’m here. I would 100% notice. Can you tell me what’s been going on?”', 'calm', 3, 'empathy', 'Ava starts typing. She tells you about a lot of stuff she’s been keeping in.'),
+          c('b', '“don’t say that!! you’re being dramatic”', 'reactive', 0, 'empathy', 'Ava replies “nvm forget it.” She shuts down.'),
+          c('c', 'Wait until morning. You don’t know what to say.', 'avoid', 0, 'empathy', 'Ava doesn’t hear from anyone tonight. Not knowing what to say is normal. Saying something simple matters more than saying something perfect.'),
+          c('d', '“Are you safe right now?”', 'calm', 3, 'empathy', 'Ava says she is, but she’s really low. Asking directly didn’t make it worse. It showed her you take her seriously.'),
+        ],
+      },
+      {
+        prompt: 'Ava says: “please don’t tell anyone. I’m fine, I just needed to say it.”',
+        choices: [
+          c('a', '“I care too much to keep this secret. Let’s tell your mom or the counselor tomorrow. Tonight, you can call or text 988.”', 'reactive', 3, 'boundaries', 'Ava is quiet, then says “ok. tomorrow.” You didn’t carry it alone, and neither does she.'),
+          c('b', 'Promise to keep it secret no matter what.', 'avoid', 0, 'boundaries', 'You want to be loyal. But a secret like this is too heavy for one friend to hold, and Ava deserves real support.'),
+          c('c', 'Tell her you’ll keep listening, and tell a trusted adult yourself in the morning.', 'calm', 2, 'boundaries', 'Ava might be upset at first. Getting her help still matters more than keeping her happy with you.'),
+          c('d', 'Post about it on your story so people check on her.', 'reactive', 0, 'empathy', 'Ava feels exposed in front of everyone. Help should come from trusted people, not your followers.'),
+        ],
+      },
+    ],
+    sensitive: true,
+    careNote: 'This one is about a friend who is really struggling. Take it at your own pace.',
+    lesson: {
+      skill: 'empathy',
+      title: 'Listen, then loop in',
+      body: 'When a friend says they feel like disappearing, take it seriously. Listen without judging, then bring in a trusted adult. That’s not betrayal. It’s what being a real friend looks like when things get this heavy.',
+      tryThis: 'If you or a friend ever feel unsafe, call or text 988 (US) any time. It’s free and confidential.',
     },
   },
   {
@@ -158,7 +201,7 @@ export const CHAT: Scenario[] = [
           reactive: 'Next day, Jess says: “we thought you were at your dad’s. didn’t have to be passive aggressive about it.”',
         },
         choices: [
-          c('a', '“Ah ok. Next time just ask anyway? I’d rather say no than not get asked.”', 'calm', 3, 'voice', 'Jess adds you to the next plan before it’s even set. Clear ask, easy fix.'),
+          c('a', '“Ah ok. Next time just ask anyway? I’d rather say no than not get asked.”', 'reactive', 3, 'voice', 'Jess adds you to the next plan before it’s even set. Clear ask, easy fix.'),
           c('b', '“yeah sure, ‘thought.’”', 'reactive', 0, 'empathy', 'Jess gets defensive. A misunderstanding turns into an actual problem.'),
           c('c', '“oh it’s whatever I didn’t even want to go.”', 'avoid', 1, 'awareness', 'They believe you, so nothing changes next time either.'),
           c('d', '“ok but now you owe me a movie and I’m picking it”', 'humor', 2, 'voice', 'They agree. Fun fix, though you didn’t say the “please ask me” part.'),
@@ -191,10 +234,10 @@ export const CHAT: Scenario[] = [
       {
         prompt: 'Nobody’s stopping it. What do you do?',
         choices: [
-          c('a', '“ok I think we got the joke. moving on, did anyone do the math hw?”', 'calm', 3, 'voice', 'The chat shifts. Tyler sends one more emoji, then drops it. Noah reacts to the math question.'),
-          c('b', '“Tyler you’re literally so annoying, leave him alone”', 'reactive', 1, 'control', 'Now it’s you vs. Tyler. It stops the roast but starts a new fight.'),
+          c('a', '“ok we got the joke. anyone do the math hw?”', 'calm', 2, 'voice', 'It stops. But Noah never learns anyone was on his side.'),
+          c('b', '“ok that’s enough. Noah’s literally in here.”', 'reactive', 3, 'control', 'The chat goes quiet. Bri: “yeah fair.” Ten minutes later Noah DMs you: “thanks.”'),
           c('c', 'Send a laughing emoji so you don’t look weird.', 'avoid', 0, 'empathy', 'Noah sees your reaction too. That one stings him the most.'),
-          c('d', 'Make the sticker, but of yourself tripping.', 'humor', 2, 'empathy', 'Everyone laughs at you instead. The heat comes off Noah, and your choice of target says a lot.'),
+          c('d', 'Make the sticker, but it’s you tripping instead.', 'humor', 2, 'empathy', 'Everyone laughs at you instead. The heat comes off Noah, and your choice of target says a lot.'),
         ],
       },
       {
@@ -202,7 +245,7 @@ export const CHAT: Scenario[] = [
         choices: [
           c('a', 'DM him: “that went too far. you good?”', 'calm', 3, 'empathy', 'He replies after a while: “ya. thanks. kinda sucked.” One message mattered more than you thought.'),
           c('b', 'Do nothing. It’s over, so why bring it up?', 'avoid', 1, 'empathy', 'Probably fine. But Noah never finds out anyone noticed.'),
-          c('c', 'Tell Tyler privately: “not trying to start anything, but that was a lot for Noah.”', 'calm', 2, 'voice', 'Tyler shrugs it off, but he goes easier next time.'),
+          c('c', 'Tell Tyler privately: “not trying to start anything, but that was a lot for Noah.”', 'reactive', 2, 'voice', 'Tyler shrugs it off, but he goes easier next time.'),
           c('d', 'Screenshot the roast and send it to a teacher anonymously.', 'reactive', 1, 'boundaries', 'Telling an adult can be the right call when it’s serious or ongoing. For one bad night, talking to Noah first might help more.'),
         ],
       },
@@ -212,47 +255,6 @@ export const CHAT: Scenario[] = [
       title: 'The redirect',
       body: 'You don’t have to give a speech to stop a pile-on. Changing the subject or saying “ok, enough” is often all it takes. If roasting someone keeps happening, that’s bullying, and a trusted adult should know.',
       tryThis: '“Alright, we got it. Moving on.”',
-    },
-  },
-  {
-    id: 'chat-6',
-    world: 'chat',
-    title: 'The 1 A.M. Message',
-    hook: 'A friend sends something heavy late at night.',
-    chaos: 5,
-    mode: 'chat',
-    place: 'Ava 🌙',
-    lines: [
-      { from: 'Ava', text: 'are you up' },
-      { from: 'Ava', text: 'idk everything just feels really bad lately' },
-      { from: 'Ava', text: 'like nobody would even notice if I disappeared' },
-      { from: '', text: 'Your heart drops. You’re not sure what to say.' },
-    ],
-    beats: [
-      {
-        prompt: 'Ava is hurting. What’s your first reply?',
-        choices: [
-          c('a', '“I’m here. I would 100% notice. Can you tell me what’s been going on?”', 'calm', 3, 'empathy', 'Ava starts typing. She tells you about a lot of stuff she’s been keeping in.'),
-          c('b', '“don’t say that!! you’re being dramatic”', 'reactive', 0, 'empathy', 'Ava replies “nvm forget it.” She shuts down.'),
-          c('c', 'Wait until morning. You don’t know what to say.', 'avoid', 0, 'empathy', 'Ava doesn’t hear from anyone tonight. Not knowing what to say is normal. Saying something simple matters more than saying something perfect.'),
-          c('d', '“who do I need to fight 😤”', 'humor', 1, 'empathy', 'Ava sends a small “lol.” It helps for a second, but she still needs someone to listen.'),
-        ],
-      },
-      {
-        prompt: 'Ava says: “please don’t tell anyone. I’m fine, I just needed to say it.”',
-        choices: [
-          c('a', '“I care about you too much to keep this to myself. Can we tell your mom or the school counselor together tomorrow? If you feel unsafe tonight, you can call or text 988 anytime.”', 'calm', 3, 'boundaries', 'Ava is quiet, then says “ok. tomorrow.” You didn’t carry it alone, and neither does she.'),
-          c('b', 'Promise to keep it secret no matter what.', 'avoid', 0, 'boundaries', 'You want to be loyal. But a secret like this is too heavy for one friend to hold, and Ava deserves real support.'),
-          c('c', 'Tell her you’ll keep listening, and tell a trusted adult yourself in the morning.', 'calm', 2, 'boundaries', 'Ava might be upset at first. Getting her help still matters more than keeping her happy with you.'),
-          c('d', 'Post about it on your story so people check on her.', 'reactive', 0, 'empathy', 'Ava feels exposed in front of everyone. Help should come from trusted people, not your followers.'),
-        ],
-      },
-    ],
-    lesson: {
-      skill: 'empathy',
-      title: 'Listen, then loop in',
-      body: 'When a friend says they feel like disappearing, take it seriously. Listen without judging, then bring in a trusted adult. That’s not betrayal. It’s what being a real friend looks like when things get this heavy.',
-      tryThis: 'If you or a friend ever feel unsafe, call or text 988 (US) any time. It’s free and confidential.',
     },
   },
 ];

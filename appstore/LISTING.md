@@ -27,7 +27,8 @@ Read the situation. Make your move. See how it lands.
 Every choice trains one of five skills: Self-Awareness, Self-Control, Empathy, Communication, and Boundaries. There are no lectures and no single “right personality.” Just real situations, real reactions, and a Skill Drop after every round with a line you can actually use in real life.
 
 WHAT’S INSIDE
-• 30 handwritten, branching scenarios across 5 worlds: Group Chat, School Halls, Friend Zone, Home Base, and Online Life
+• 30 handwritten scenarios across 5 worlds: Group Chat, School Halls, Friend Zone, Home Base, and Online Life
+• Four ways to play every moment: Steady, Bold, Step Back, or Humor. Each one can be the right call.
 • Daily Chaos: one quick call every day. Build your streak.
 • Your EQ Profile: a skill map that grows with every choice
 • Play style reveal: pick your archetype, then see how you actually play
@@ -39,7 +40,7 @@ BUILT FOR TEENS, RESPECTFUL OF PRIVACY
 • Safety resources are one tap away in Settings
 
 PRICING
-The Group Chat world and Daily Chaos are free. Unlock the other four worlds with a single one-time purchase. No subscription.
+Free: the whole Group Chat world, the first scenario of every other world, and Daily Chaos. Unlock the remaining 20 scenarios with a single one-time purchase. No subscription.
 
 Social Levels is a game for practicing social skills. It is not therapy or counseling.
 
@@ -72,14 +73,14 @@ Expected result: **13+**. Do NOT enroll in the Kids category (Kids category requ
 - Display name: Unlock All Worlds
 - Description: Unlock School, Friends, Home, and Online worlds.
 - Review screenshot: use `appstore-3-map.png` or a screenshot of the paywall
-- Review note: "Tap any locked world on the Map tab to see the paywall."
+- Review note: "Play tab → School Halls → any scenario marked FULL opens the paywall."
 
 ## Review notes (App Review Information)
 Social Levels is a single-player game. No login is needed.
 - The first world (Group Chat) and Daily Chaos are free.
-- To see the in-app purchase: Map tab → tap "School Halls" (locked) → "Unlock for $4.99". Restore is on the same screen and in Me → Settings.
+- To see the in-app purchase: Play tab → tap "School Halls" → tap any scenario marked FULL → "Unlock for $4.99". Restore is on the same screen and in You → Settings.
 - All content is pre-written; there is no AI generation, user content, chat, or account.
-- Safety resources (988, Crisis Text Line, 911) are in Me → Settings.
+- Safety resources (988, Crisis Text Line, findahelpline.com, 911) are in You → Settings and appear after the three sensitive scenarios, which can be skipped and show no score.
 Contact: innerlink24@gmail.com
 
 ## Screenshots (6.9" display, 1320 × 2868)

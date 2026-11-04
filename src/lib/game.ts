@@ -3,6 +3,14 @@ import { DAILY, SCENARIOS, SCENARIOS_BY_WORLD, WORLDS } from '../data';
 
 export const STORAGE_KEY = 'social_levels_save_v1';
 
+function prefersReducedMotion() {
+  try {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  } catch {
+    return false;
+  }
+}
+
 export const freshState = (): GameState => ({
   version: 1,
   onboarded: false,
@@ -14,7 +22,7 @@ export const freshState = (): GameState => ({
   records: {},
   daily: { lastDate: null, streak: 0, bestStreak: 0, done: {} },
   auraColor: '#00f5ff',
-  settings: { haptics: true, reduceMotion: false },
+  settings: { haptics: true, reduceMotion: prefersReducedMotion() },
   unlocked: false,
   createdAt: new Date().toISOString(),
 });
@@ -31,7 +39,7 @@ export function hydrate(raw: string | null): GameState {
       skills: { ...base.skills, ...(s.skills ?? {}) },
       tones: { ...base.tones, ...(s.tones ?? {}) },
       records: { ...(s.records ?? {}) },
-      daily: { ...base.daily, ...(s.daily ?? {}), done: { ...(s.daily?.done ?? {}) } },
+      daily: { ...base.daily, ...(s.daily ?? {}), done: { ...(s.daily?.done ?? {}) }, picks: { ...(s.daily?.picks ?? {}) } },
       settings: { ...base.settings, ...(s.settings ?? {}) },
     };
   } catch {
@@ -52,7 +60,7 @@ export function levelProgress(aura: number) {
 }
 
 export const LEVEL_TITLES = [
-  'NPC', 'Side Character', 'Rising Player', 'Vibe Reader', 'Room Reader',
+  'New Player', 'Side Character', 'Rising Player', 'Vibe Reader', 'Room Reader',
   'Calm Operator', 'Social Strategist', 'Main Character', 'EQ Elite', 'Legend',
 ];
 export const levelTitle = (level: number) => LEVEL_TITLES[Math.min(level, LEVEL_TITLES.length) - 1];
@@ -88,17 +96,31 @@ export function liveStreak(state: GameState, today = localDate()): number {
 
 /* ---------- Unlocks ---------- */
 
+/** Whole world owned (free world, or the unlock was bought). */
 export function worldAccessible(state: GameState, worldId: string) {
   const w = WORLDS.find((x) => x.id === worldId);
   return !!w && (w.free || state.unlocked);
 }
 
+/** The first scenario of every world is a free sample. Everything after it needs the unlock. */
+export function needsUnlock(state: GameState, s: Scenario) {
+  if (worldAccessible(state, s.world)) return false;
+  return SCENARIOS_BY_WORLD[s.world].findIndex((x) => x.id === s.id) > 0;
+}
+
 /** Within a world, scenarios open one at a time. */
 export function scenarioOpen(state: GameState, s: Scenario) {
-  if (!worldAccessible(state, s.world)) return false;
+  if (needsUnlock(state, s)) return false;
   const list = SCENARIOS_BY_WORLD[s.world];
   const i = list.findIndex((x) => x.id === s.id);
   return i === 0 || !!state.records[list[i - 1].id];
+}
+
+/** Next scenario in the same world, if any. */
+export function nextInWorld(s: Scenario): Scenario | null {
+  const list = SCENARIOS_BY_WORLD[s.world];
+  const i = list.findIndex((x) => x.id === s.id);
+  return list[i + 1] ?? null;
 }
 
 export function worldProgress(state: GameState, worldId: keyof typeof SCENARIOS_BY_WORLD) {
@@ -151,9 +173,12 @@ export function completeScenario(state: GameState, s: Scenario, picks: Choice[])
   const prev = state.records[s.id];
   const firstClear = !prev;
   const newBest = !prev || score > prev.bestScore;
-  const auraGained = firstClear ? 20 + 10 * score : newBest ? 10 * (score - prev.bestScore) : 5;
+  const auraGained = s.sensitive
+    ? firstClear ? 60 : 0
+    : firstClear ? 20 + 10 * score : newBest ? 10 * (score - prev.bestScore) : 0;
 
-  const { skills, tones } = tally(state, picks);
+  // Skills and play style come from first clears only, so replays can't be farmed.
+  const { skills, tones } = firstClear ? tally(state, picks) : { skills: state.skills, tones: state.tones };
   const next: GameState = {
     ...state,
     aura: state.aura + auraGained,
@@ -162,13 +187,19 @@ export function completeScenario(state: GameState, s: Scenario, picks: Choice[])
     records: {
       ...state.records,
       [s.id]: {
-        stars: Math.max(stars, prev?.stars ?? 0),
+        stars: s.sensitive ? 3 : Math.max(stars, prev?.stars ?? 0),
         bestScore: Math.max(score, prev?.bestScore ?? 0),
         plays: (prev?.plays ?? 0) + 1,
       },
     },
   };
   return [next, finish(state, next, { score, max, stars, auraGained, firstClear, newBest })];
+}
+
+/** Skip a sensitive scenario: progression continues, no rewards. */
+export function skipScenario(state: GameState, s: Scenario): GameState {
+  if (state.records[s.id]) return state;
+  return { ...state, records: { ...state.records, [s.id]: { stars: 0, bestScore: 0, plays: 0 } } };
 }
 
 export function completeDaily(state: GameState, date: string, pick: Choice): [GameState, RunResult] {
@@ -190,7 +221,8 @@ export function completeDaily(state: GameState, date: string, pick: Choice): [Ga
       lastDate: date,
       streak,
       bestStreak: Math.max(state.daily.bestStreak, streak),
-      done: { ...state.daily.done, [date]: pick.score },
+      done: { ...state.daily.done, [date]: already ? state.daily.done[date] : pick.score },
+      picks: { ...(state.daily.picks ?? {}), [date]: already ? state.daily.picks?.[date] ?? pick.id : pick.id },
     },
   };
   return [next, finish(state, next, { score: pick.score, max: 3, stars: starsFor(pick.score, 3), auraGained, firstClear: !already, newBest: !already })];
@@ -208,12 +240,23 @@ function finish(before: GameState, after: GameState, r: Omit<RunResult, 'levelBe
 
 /* ---------- Play style ---------- */
 
-export function playStyle(state: GameState): { tone: Tone; pct: number } | null {
+export const STYLE_MIN_MOVES = 6;
+
+/** Real play style, once there is enough signal. Returns the top tone and a runner-up. */
+export function playStyle(state: GameState): { tone: Tone; pct: number; second: Tone | null; total: number } | null {
   const total = Object.values(state.tones).reduce((a, b) => a + b, 0);
-  if (!total) return null;
-  const [tone, n] = (Object.entries(state.tones) as [Tone, number][]).sort((a, b) => b[1] - a[1])[0];
-  return { tone, pct: Math.round((n / total) * 100) };
+  if (total < STYLE_MIN_MOVES) return null;
+  const sorted = (Object.entries(state.tones) as [Tone, number][]).sort((a, b) => b[1] - a[1]);
+  const [tone, n] = sorted[0];
+  const [t2, n2] = sorted[1];
+  if ((n - n2) / total < 0.1) {
+    // too close to call: name both
+    return { tone, pct: Math.round((n / total) * 100), second: t2, total };
+  }
+  return { tone, pct: Math.round((n / total) * 100), second: n2 / total >= 0.25 ? t2 : null, total };
 }
+
+export const totalMoves = (state: GameState) => Object.values(state.tones).reduce((a, b) => a + b, 0);
 
 /* ---------- Badges ---------- */
 
@@ -234,8 +277,8 @@ export const BADGES: Badge[] = [
   { id: 'first', title: 'Player One', desc: 'Clear your first scenario.', icon: 'Play', check: (s) => cleared(s) >= 1 },
   { id: 'perfect', title: 'Flawless', desc: 'Get 3 stars on any scenario.', icon: 'Star', check: (s) => perfects(s) >= 1 },
   { id: 'daily3', title: 'On a Roll', desc: 'Hit a 3-day Daily Chaos streak.', icon: 'Flame', check: (s) => s.daily.bestStreak >= 3 },
-  { id: 'calm10', title: 'Cool Head', desc: 'Make 10 calm choices.', icon: 'Snowflake', check: (s) => s.tones.calm >= 10 },
-  { id: 'w-chat', title: 'Chat Survivor', desc: 'Clear every Group Chat scenario.', icon: 'MessagesSquare', check: (s) => worldDone(s, 'chat') },
+  { id: 'calm10', title: 'Cool Head', desc: 'Make 10 Steady choices.', icon: 'Snowflake', check: (s) => s.tones.calm >= 10 },
+  { id: 'w-chat', title: 'Read the Chat', desc: 'Clear every Group Chat scenario.', icon: 'MessagesSquare', check: (s) => worldDone(s, 'chat') },
   { id: 'w-school', title: 'Hall Monitor', desc: 'Clear every School Halls scenario.', icon: 'School', check: (s) => worldDone(s, 'school') },
   { id: 'w-friends', title: 'Ride or Die', desc: 'Clear every Friend Zone scenario.', icon: 'HeartHandshake', check: (s) => worldDone(s, 'friends') },
   { id: 'w-home', title: 'Peacekeeper', desc: 'Clear every Home Base scenario.', icon: 'House', check: (s) => worldDone(s, 'home') },

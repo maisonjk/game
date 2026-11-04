@@ -18,7 +18,7 @@ export const freshState = (): GameState => ({
   archetype: null,
   aura: 0,
   skills: { awareness: 0, control: 0, empathy: 0, voice: 0, boundaries: 0 },
-  tones: { calm: 0, reactive: 0, avoid: 0, humor: 0 },
+  tones: { calm: 0, reactive: 0, avoid: 0, humor: 0, heated: 0, ghost: 0 },
   records: {},
   daily: { lastDate: null, streak: 0, bestStreak: 0, done: {} },
   auraColor: '#00f5ff',
@@ -59,7 +59,7 @@ export function hydrate(raw: string | null): GameState {
       archetype: arch,
       aura: num(s.aura, 0),
       skills: numMap(s.skills, ['awareness', 'control', 'empathy', 'voice', 'boundaries']),
-      tones: numMap(s.tones, ['calm', 'reactive', 'avoid', 'humor']),
+      tones: numMap(s.tones, ['calm', 'reactive', 'avoid', 'humor', 'heated', 'ghost']),
       records,
       daily: {
         lastDate: typeof d.lastDate === 'string' ? d.lastDate : null,
@@ -69,7 +69,17 @@ export function hydrate(raw: string | null): GameState {
         picks,
       },
       auraColor: /^#[0-9a-f]{6}$/i.test(str(s.auraColor, '')) ? (s.auraColor as string) : base.auraColor,
-      settings: { haptics: bool(set.haptics, base.settings.haptics), reduceMotion: bool(set.reduceMotion, base.settings.reduceMotion) },
+      settings: (() => {
+        const rem = obj(set.reminder);
+        const hour = num(rem.hour, 19);
+        const minute = num(rem.minute, 0);
+        return {
+          haptics: bool(set.haptics, base.settings.haptics),
+          reduceMotion: bool(set.reduceMotion, base.settings.reduceMotion),
+          reminder: { on: bool(rem.on, false), hour: hour < 24 ? hour : 19, minute: minute < 60 ? minute : 0 },
+          reminderAsked: bool(set.reminderAsked, false),
+        };
+      })(),
       unlocked: bool(s.unlocked, false),
       createdAt: str(s.createdAt, base.createdAt),
     };

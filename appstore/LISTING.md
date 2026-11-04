@@ -28,8 +28,8 @@ Every choice trains one of five skills: Self-Awareness, Self-Control, Empathy, C
 
 WHAT’S INSIDE
 • 30 handwritten scenarios across 5 worlds: Group Chat, School Halls, Friend Zone, Home Base, and Online Life
-• Four ways to play every moment: Steady, Bold, Step Back, or Humor. Each one can be the right call.
-• Daily Chaos: one quick call every day. Build your streak.
+• Four ways to play every moment: Steady, Bold, Step Back, or Humor. Each one can be the right call, and each has a twin that backfires (Heated, Ghosting).
+• Daily Chaos: one quick call every day, with an optional reminder that skips days you’ve already played
 • Your EQ Profile: a skill map that grows with every choice
 • Play style reveal: pick your archetype, then see how you actually play
 • Levels, aura, stars, and 13 badges to unlock
@@ -45,6 +45,9 @@ Free: the whole Group Chat world, the first scenario of every other world, and D
 Social Levels is a game for practicing social skills. It is not therapy or counseling.
 
 **What’s New:** First release.
+
+## App Privacy note
+Optional reminders are local iOS notifications. No push service, no data leaves the device.
 
 **Copyright:** © 2026 Jiae Kim
 

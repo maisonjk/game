@@ -4,6 +4,7 @@ import { STORAGE_KEY, freshState, hydrate } from './game';
 import { load, remove, save } from './storage';
 import { setHapticsEnabled } from './haptics';
 import { checkUnlocked } from './purchases';
+import { syncReminders } from './reminders';
 
 interface Ctx {
   state: GameState;
@@ -54,6 +55,14 @@ export function GameProvider({ children, fallback }: { children: React.ReactNode
     setRaw(s);
     await save(STORAGE_KEY, JSON.stringify(s));
   }, []);
+
+  // Keep scheduled reminders in step with the player's choices and with today's Daily.
+  const doneCount = state ? Object.keys(state.daily.done).length : 0;
+  const rem = state?.settings.reminder;
+  useEffect(() => {
+    if (state) void syncReminders(state);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [doneCount, rem?.on, rem?.hour, rem?.minute, !!state]);
 
   useEffect(() => {
     if (state) {

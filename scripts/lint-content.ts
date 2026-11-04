@@ -3,6 +3,7 @@ import { SCENARIOS, DAILY } from '../src/data/index.ts';
 
 const problems: string[] = [];
 const best: Record<string, number> = { calm: 0, reactive: 0, avoid: 0, humor: 0 };
+const UNHEALTHY = new Set(['heated', 'ghost']);
 let beats = 0;
 let longestIsBest = 0;
 
@@ -11,6 +12,11 @@ for (const s of SCENARIOS) {
     beats++;
     const tops = b.choices.filter((c) => c.score === 3);
     if (!tops.length) problems.push(`${s.id} beat ${i}: no 3-point choice`);
+    // Healthy styles must be able to fail too, and unhealthy ones must never be "right".
+    for (const c of b.choices) {
+      if (UNHEALTHY.has(c.tone) && c.score > 1) problems.push(`${s.id} beat ${i} ${c.id}: ${c.tone} scored ${c.score} (max 1)`);
+      if ((c.tone === 'reactive' || c.tone === 'avoid') && c.score < 2) problems.push(`${s.id} beat ${i} ${c.id}: ${c.tone} scored ${c.score}; retag as heated/ghost`);
+    }
     tops.forEach((c) => best[c.tone]++);
     const longest = [...b.choices].sort((x, y) => y.text.length - x.text.length)[0];
     if (longest.score === 3 && tops.length === 1) longestIsBest++;

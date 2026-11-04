@@ -5,6 +5,7 @@ import { useGame } from '../lib/store';
 import type { Choice } from '../types';
 import { Icon } from './ui';
 import { ResultCard } from './ScenarioPlayer';
+import { ReminderOffer } from './Reminder';
 
 function useCountdown() {
   const [now, setNow] = useState(() => new Date());
@@ -104,6 +105,7 @@ export default function DailyScreen({ onBadges }: { onBadges: (r: RunResult) => 
             <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-cyan">Takeaway</div>
             <p className="mt-1.5 font-display font-bold text-lg leading-snug">{daily.tip}</p>
           </div>
+          <ReminderOffer />
         </div>
       )}
 

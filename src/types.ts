@@ -3,7 +3,8 @@ export type TabId = 'map' | 'daily' | 'you';
 export type ArchetypeId = 'chill' | 'chaos' | 'strategist' | 'connector';
 
 /** How a choice "feels". Drives the play-style readout. */
-export type Tone = 'calm' | 'reactive' | 'avoid' | 'humor';
+/** Steady, Bold, Step Back, Humor are healthy styles; Heated and Ghosting are their unhealthy twins. */
+export type Tone = 'calm' | 'reactive' | 'avoid' | 'humor' | 'heated' | 'ghost';
 
 /** The five EQ skills the game trains. */
 export type SkillId = 'awareness' | 'control' | 'empathy' | 'voice' | 'boundaries';
@@ -102,7 +103,14 @@ export interface GameState {
     picks?: Record<string, string>; // date -> choice id
   };
   auraColor: string;
-  settings: { haptics: boolean; reduceMotion: boolean };
+  settings: {
+    haptics: boolean;
+    reduceMotion: boolean;
+    /** Opt-in local reminder for Daily Chaos. */
+    reminder?: { on: boolean; hour: number; minute: number };
+    /** True once we've offered the reminder (so we only ask once). */
+    reminderAsked?: boolean;
+  };
   unlocked: boolean;
   createdAt: string;
 }

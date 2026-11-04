@@ -21,9 +21,14 @@ export const SKILL_ORDER: SkillId[] = ['awareness', 'control', 'empathy', 'voice
 export const TONES: Record<Tone, { label: string; style: string; color: string }> = {
   calm: { label: 'Steady', style: 'Steady Hand', color: '#00f5ff' },
   reactive: { label: 'Bold', style: 'Straight Shooter', color: '#ff4b89' },
-  avoid: { label: 'Step Back', style: 'Low-Key', color: '#9aa6b2' },
+  avoid: { label: 'Step Back', style: 'Low-Key', color: '#6effa8' },
   humor: { label: 'Humor', style: 'Comic Relief', color: '#ffd166' },
+  heated: { label: 'Heated', style: 'Short Fuse', color: '#ff8a3d' },
+  ghost: { label: 'Ghosting', style: 'Ghost Mode', color: '#9aa6b2' },
 };
+
+/** Display order for tone breakdowns. */
+export const TONE_ORDER: Tone[] = ['calm', 'reactive', 'avoid', 'humor', 'heated', 'ghost'];
 
 export const ARCHETYPES: { id: ArchetypeId; title: string; emoji: string; description: string; color: string }[] = [
   { id: 'chill', title: 'Chill Observer', emoji: '😎', description: 'Watches the room, keeps the peace, rarely loses it.', color: '#00f5ff' },

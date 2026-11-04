@@ -7,6 +7,7 @@ import { success, tap } from '../lib/haptics';
 import type { WorldId } from '../types';
 import { Button, Icon, Sheet, useModal } from './ui';
 import { CrisisCard } from './CrisisCard';
+import { ReminderSetting } from './Reminder';
 
 export type LegalPage = 'privacy' | 'terms' | 'support';
 
@@ -154,6 +155,7 @@ export function Settings({ open, onClose, onPaywall, onLegal, onReset }: { open:
       <div className="divide-y divide-line">
         <Toggle on={state.settings.haptics} onChange={(v) => setState((s) => ({ ...s, settings: { ...s.settings, haptics: v } }))} label="Haptics" icon="Vibrate" desc="Little buzzes when you make a move." />
         <Toggle on={state.settings.reduceMotion} onChange={(v) => setState((s) => ({ ...s, settings: { ...s.settings, reduceMotion: v } }))} label="Reduce motion" icon="Eye" desc="Fewer animations, story shows instantly." />
+        <ReminderSetting />
       </div>
 
       <div className="mt-6 text-[11px] font-bold tracking-[0.2em] uppercase text-muted">Game</div>

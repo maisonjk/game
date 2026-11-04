@@ -36,7 +36,7 @@ export function Header({ onProfile }: { onProfile: () => void }) {
             onProfile();
           }}
           aria-label={`Level ${lp.level}, ${state.aura} aura. Open profile`}
-          className="flex items-center gap-2 pl-3 pr-1.5 h-9 my-1 rounded-full whitespace-nowrap bg-white/5 border border-line active:scale-95 transition"
+          className="flex items-center gap-2 pl-3 pr-1.5 h-11 rounded-full whitespace-nowrap bg-white/5 border border-line active:scale-95 transition"
         >
           <span className="font-display font-extrabold text-sm text-cyan tabular-nums">{state.aura}</span>
           <span className="text-[10px] font-bold text-muted tracking-widest">AURA</span>

@@ -22,7 +22,7 @@ export default function YouScreen({ onSettings }: { onSettings: () => void }) {
   const stars = Object.values(state.records).reduce((n, r) => n + r.stars, 0);
   const vals = SKILL_ORDER.map((k) => state.skills[k]);
   const max = Math.max(12, ...vals);
-  const owned = (c: { color: string; level: number }) => level >= c.level || c.color === arch?.color;
+  const owned = (c: { color: string; level: number }) => level >= c.level;
 
   return (
     <div className="px-5 pt-5 pb-32 max-w-lg mx-auto">
@@ -181,7 +181,7 @@ export default function YouScreen({ onSettings }: { onSettings: () => void }) {
 
       <Sheet open={editing} onClose={() => setEditing(false)} title="Edit player">
         <label className="text-[11px] font-bold tracking-[0.2em] uppercase text-muted" htmlFor="edit-name">Nickname</label>
-        <input id="edit-name" value={name} maxLength={18} onChange={(e) => setName(e.target.value)}
+        <input id="edit-name" value={name} maxLength={36} onChange={(e) => setName(e.target.value)}
           className="mt-2 w-full h-14 rounded-2xl bg-panel-2 border border-line px-4 font-display font-bold text-xl focus:border-cyan focus:outline-none" />
         <div className="mt-5 text-[11px] font-bold tracking-[0.2em] uppercase text-muted">Archetype</div>
         <div className="mt-2 grid grid-cols-2 gap-2">
@@ -193,7 +193,7 @@ export default function YouScreen({ onSettings }: { onSettings: () => void }) {
             </button>
           ))}
         </div>
-        <Button className="w-full mt-6 mb-4" disabled={!name.trim()} onClick={() => { setState((s) => ({ ...s, name: name.trim().slice(0, 18), archetype: arc })); setEditing(false); }}>Save</Button>
+        <Button className="w-full mt-6 mb-4" disabled={!name.trim()} onClick={() => { setState((s) => ({ ...s, name: [...name.trim()].slice(0, 18).join(''), archetype: arc })); setEditing(false); }}>Save</Button>
       </Sheet>
     </div>
   );

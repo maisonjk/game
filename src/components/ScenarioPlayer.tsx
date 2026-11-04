@@ -5,7 +5,7 @@ import { completeScenario, levelTitle, personalize, skipScenario, type RunResult
 import { success, thud, warn } from '../lib/haptics';
 import { useGame } from '../lib/store';
 import type { Choice, Scenario } from '../types';
-import { Button, Icon, IconButton, Stars } from './ui';
+import { Button, Icon, IconButton, Stars, useModal } from './ui';
 import { CrisisCard } from './CrisisCard';
 
 function shuffle<T>(arr: T[]): T[] {
@@ -116,8 +116,8 @@ export default function ScenarioPlayer({
 
   const beat1Prompt = () => {
     const b = scenario.beats[1];
-    const t = picks[0]?.tone;
-    return p((t && b.promptByTone?.[t]) || b.prompt);
+    const first = picks[0];
+    return p((first && b.promptByChoice?.[first.id]) || (first && b.promptByTone?.[first.tone]) || b.prompt);
   };
   const isChat = scenario.mode === 'chat';
 
@@ -217,6 +217,38 @@ export default function ScenarioPlayer({
             </>
           )}
 
+          {!scenario.sensitive && (
+            <div className="mt-6 w-full grid gap-2 text-left">
+              {picks.map((c, i) => {
+                const best = scenario.beats[i].choices.filter((x) => x.score === 3).sort((a, b) => a.text.length - b.text.length)[0];
+                return (
+                  <div key={i} className="rounded-2xl bg-panel border border-line p-4">
+                    <div className="flex gap-3 items-start">
+                      <div className="flex-1">
+                        <div className="text-[11px] font-bold tracking-widest uppercase text-muted">
+                          Move {i + 1} · <span style={{ color: TONES[c.tone].color }}>{TONES[c.tone].label}</span> · {SKILLS[c.skill].name}
+                        </div>
+                        <div className="mt-1 text-[15px] leading-snug">{p(c.text)}</div>
+                      </div>
+                      <span className="font-display font-black text-lg tabular-nums" style={{ color: RESULT_COLOR(c.score) }}>{c.score}/3</span>
+                    </div>
+                    {c.score < 3 && best && (
+                      <details className="mt-3 group" open>
+                        <summary className="cursor-pointer list-none text-sm font-semibold text-cyan flex items-center gap-1 min-h-11">
+                          <Icon name="ChevronRight" size={16} className="transition group-open:rotate-90" /> See a higher-EQ move
+                        </summary>
+                        <div className="mt-1 pl-5 border-l-2 border-cyan/40">
+                          <div className="text-[11px] font-bold tracking-widest uppercase" style={{ color: TONES[best.tone].color }}>{TONES[best.tone].label}</div>
+                          <p className="mt-1 text-[15px] leading-snug">{p(best.text)}</p>
+                          <p className="mt-1 text-sm text-muted leading-snug">{p(best.result)}</p>
+                        </div>
+                      </details>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
           {leveled && (
             <div className="mt-6 w-full rounded-3xl border border-gold/40 p-5 anim-pop" style={{ background: 'linear-gradient(135deg, #ffd16626, #161b2a 70%)' }}>
               <div className="text-[11px] font-bold tracking-[0.22em] uppercase text-gold">Level up</div>
@@ -239,38 +271,6 @@ export default function ScenarioPlayer({
             </div>
           )}
 
-          {!scenario.sensitive && (
-            <div className="mt-8 w-full grid gap-2 text-left">
-              {picks.map((c, i) => {
-                const best = scenario.beats[i].choices.filter((x) => x.score === 3).sort((a, b) => a.text.length - b.text.length)[0];
-                return (
-                  <div key={i} className="rounded-2xl bg-panel border border-line p-4">
-                    <div className="flex gap-3 items-start">
-                      <div className="flex-1">
-                        <div className="text-[11px] font-bold tracking-widest uppercase text-muted">
-                          Move {i + 1} · <span style={{ color: TONES[c.tone].color }}>{TONES[c.tone].label}</span> · {SKILLS[c.skill].name}
-                        </div>
-                        <div className="mt-1 text-[15px] leading-snug">{p(c.text)}</div>
-                      </div>
-                      <span className="font-display font-black text-lg tabular-nums" style={{ color: RESULT_COLOR(c.score) }}>{c.score}/3</span>
-                    </div>
-                    {c.score < 3 && best && (
-                      <details className="mt-3 group">
-                        <summary className="cursor-pointer list-none text-sm font-semibold text-cyan flex items-center gap-1 min-h-11">
-                          <Icon name="ChevronRight" size={16} className="transition group-open:rotate-90" /> See a higher-EQ move
-                        </summary>
-                        <div className="mt-1 pl-5 border-l-2 border-cyan/40">
-                          <div className="text-[11px] font-bold tracking-widest uppercase" style={{ color: TONES[best.tone].color }}>{TONES[best.tone].label}</div>
-                          <p className="mt-1 text-[15px] leading-snug">{p(best.text)}</p>
-                          <p className="mt-1 text-sm text-muted leading-snug">{p(best.result)}</p>
-                        </div>
-                      </details>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
         </div>
       </Shell>
     );
@@ -350,7 +350,7 @@ export default function ScenarioPlayer({
         {picks[0] && (
           <>
             <ChosenBubble text={p(picks[0].text)} />
-            <div ref={resultRef}><ResultCard choice={picks[0]} text={p(picks[0].result)} /></div>
+            <div ref={resultRef}><ResultCard choice={picks[0]} text={p(picks[0].result)} neutral={scenario.sensitive} /></div>
           </>
         )}
 
@@ -359,7 +359,7 @@ export default function ScenarioPlayer({
         {picks[1] && phase === 'result1' && (
           <>
             <ChosenBubble text={p(picks[1].text)} />
-            <div ref={resultRef}><ResultCard choice={picks[1]} text={p(picks[1].result)} /></div>
+            <div ref={resultRef}><ResultCard choice={picks[1]} text={p(picks[1].result)} neutral={scenario.sensitive} /></div>
           </>
         )}
         <div ref={endRef} />
@@ -382,8 +382,10 @@ export default function ScenarioPlayer({
 }
 
 function Shell({ children, onClose, world, color, title, footer, onTapBody, page = 'play' }: { children: ReactNode; onClose: () => void; world: string; color: string; title?: string; footer?: ReactNode; onTapBody?: () => void; page?: string }) {
+  const dialog = useRef<HTMLDivElement>(null);
+  useModal(true, dialog, 'chrome');
   return (
-    <div className="fixed inset-0 z-50 bg-ink flex flex-col pt-safe">
+    <div ref={dialog} tabIndex={-1} role="dialog" aria-modal="true" aria-label={`${world}${title ? `: ${title}` : ''}`} className="fixed inset-0 z-50 bg-ink flex flex-col pt-safe outline-none">
       <div className="absolute inset-0 bg-grid opacity-60 pointer-events-none" />
       <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[480px] h-[320px] rounded-full blur-[110px] opacity-25 pointer-events-none" style={{ background: color }} />
       <div className="relative w-full max-w-lg mx-auto px-4 flex items-center justify-between h-14 shrink-0">
@@ -461,11 +463,11 @@ function ChosenBubble({ text }: { text: string }) {
   );
 }
 
-export function ResultCard({ choice, text }: { choice: Choice; text: string }) {
-  const color = RESULT_COLOR(choice.score);
+export function ResultCard({ choice, text, neutral }: { choice: Choice; text: string; neutral?: boolean }) {
+  const color = neutral ? '#a3adc2' : RESULT_COLOR(choice.score);
   return (
     <div className="mt-3 rounded-2xl p-4 border anim-pop" style={{ borderColor: `${color}55`, background: `${color}0d` }}>
-      <span className="text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color }}>{RESULT_LABEL(choice.score)}</span>
+      <span className="text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color }}>{neutral ? 'What happened' : RESULT_LABEL(choice.score)}</span>
       <p className="mt-1.5 text-[15px] leading-relaxed">{text}</p>
     </div>
   );

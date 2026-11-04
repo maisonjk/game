@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { PRICE_FALLBACK, SCENARIOS_BY_WORLD, SUPPORT_EMAIL, WORLDS } from '../data';
 import { buyUnlock, getPrice, purchasesAvailable, restoreUnlock } from '../lib/purchases';
 import { useGame } from '../lib/store';
 import { success, tap } from '../lib/haptics';
 import type { WorldId } from '../types';
-import { Button, Icon, Sheet } from './ui';
+import { Button, Icon, Sheet, useModal } from './ui';
 import { CrisisCard } from './CrisisCard';
 
 export type LegalPage = 'privacy' | 'terms' | 'support';
@@ -94,7 +94,7 @@ export function Paywall({ open, onClose, onLegal, focus }: { open: boolean; onCl
       <div className="pt-1">
         <div className="text-[11px] font-bold tracking-[0.22em] uppercase text-gold">Full game</div>
         <h2 className="mt-2 font-display font-black text-[34px] uppercase tracking-tight leading-[0.95]">Unlock every world</h2>
-        <p className="mt-3 text-muted">You’ve tried the first scenario in each world. Get the other 20, plus Group Chat and Daily Chaos stay free forever. One purchase, no subscription.</p>
+        <p className="mt-3 text-muted">Get the other 20 scenarios. Group Chat, the first scenario of every world, and Daily Chaos stay free forever. One purchase, no subscription.</p>
       </div>
       <div className="mt-5 grid grid-cols-2 gap-2">
         {paid.map((w) => {
@@ -188,7 +188,7 @@ export function Settings({ open, onClose, onPaywall, onLegal, onReset }: { open:
         <Row icon="Mail" label="Help & Support" onClick={() => onLegal('support')} />
       </div>
       <p className="mt-6 pb-8 text-center text-xs text-muted">
-        Social Levels v1.0 · Your progress stays on this device.
+        Social Levels v1.1 · Your progress stays on this device.
         <br />
         {SUPPORT_EMAIL}
       </p>
@@ -224,17 +224,20 @@ export function Settings({ open, onClose, onPaywall, onLegal, onReset }: { open:
 /* ---------------- Legal viewer ---------------- */
 
 export function LegalViewer({ page, onClose }: { page: LegalPage | null; onClose: () => void }) {
+  const back = useRef<HTMLButtonElement>(null);
+  useModal(!!page, back);
   if (!page) return null;
   const titles: Record<LegalPage, string> = { privacy: 'Privacy Policy', terms: 'Terms of Use', support: 'Help & Support' };
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[70] bg-ink flex flex-col pt-safe anim-fade" role="dialog" aria-modal="true" aria-label={titles[page]}>
       <div className="h-14 px-4 flex items-center gap-3 border-b border-line shrink-0">
-        <button aria-label="Back" onClick={onClose} className="w-11 h-11 rounded-full grid place-items-center bg-white/5 active:scale-95">
+        <button ref={back} aria-label="Back" onClick={onClose} className="w-11 h-11 rounded-full grid place-items-center bg-white/5 active:scale-95">
           <Icon name="ChevronLeft" size={22} />
         </button>
         <span className="font-display font-extrabold uppercase">{titles[page]}</span>
       </div>
       <iframe title={titles[page]} src={`./${page}.html`} className="flex-1 w-full bg-ink" />
-    </div>
+    </div>,
+    document.body,
   );
 }

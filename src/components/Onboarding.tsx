@@ -27,7 +27,7 @@ export default function Onboarding() {
     if (!arch) return;
     success();
     const color = ARCHETYPES.find((a) => a.id === arch)!.color;
-    setState((s) => ({ ...s, onboarded: true, name: name.trim().slice(0, 18), archetype: arch, auraColor: color === '#ffd166' ? '#00f5ff' : color }));
+    setState((s) => ({ ...s, onboarded: true, name: [...name.trim()].slice(0, 18).join(''), archetype: arch, auraColor: color === '#ff4b89' ? color : '#00f5ff' }));
   };
 
   return (
@@ -83,7 +83,7 @@ export default function Onboarding() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && name.trim() && setStep(2)}
-                maxLength={18}
+                maxLength={36}
                 autoComplete="off"
                 autoCapitalize="words"
                 placeholder="Nickname"

@@ -46,6 +46,22 @@ export default function MapScreen({ onPlay, onPaywall }: { onPlay: (s: Scenario)
         </button>
       )}
 
+      {!next && state.unlocked && (() => {
+        const chase = Object.values(SCENARIOS_BY_WORLD).flat().filter((s) => !s.sensitive && (state.records[s.id]?.stars ?? 0) < 3);
+        return (
+          <Card className="mt-6 p-5 border-cyan/40" style={{ background: 'linear-gradient(135deg, #00f5ff1f, #161b2a 60%)' }}>
+            <div className="text-[11px] font-bold tracking-[0.2em] uppercase text-cyan">All 30 cleared</div>
+            <div className="mt-2 font-display font-black text-2xl uppercase leading-tight">{chase.length ? 'Chase 3 stars' : 'Every star collected'}</div>
+            <p className="mt-1.5 text-sm text-muted">{chase.length ? `${chase.length} scenarios still have stars to earn. Keep your Daily Chaos streak going too.` : 'You’ve mastered every scenario. Keep your Daily Chaos streak going.'}</p>
+            {chase[0] && (
+              <Button variant="outline" className="mt-4 w-full" onClick={() => onPlay(chase[0])}>
+                Replay {chase[0].title}
+              </Button>
+            )}
+          </Card>
+        );
+      })()}
+
       {allFreeDone && (
         <Card className="mt-6 p-5 border-gold/40" style={{ background: 'linear-gradient(135deg, #ffd16622, #161b2a 60%)' }}>
           <div className="text-[11px] font-bold tracking-[0.2em] uppercase text-gold">Free scenarios cleared</div>
@@ -144,7 +160,7 @@ function WorldSheet({ worldId, onClose, onPlay, onPaywall }: { worldId: WorldId 
                 <div className="font-display font-bold text-base leading-tight">{s.title}</div>
                 <div className="text-[13px] text-muted truncate">{s.hook}</div>
               </div>
-              {rec ? (rec.plays === 0 ? <span className="text-xs text-muted">Skipped</span> : <Stars n={rec.stars} size={14} />) : open ? <Icon name="Play" size={18} className="text-cyan" /> : paid ? <span className="text-[10px] font-black tracking-widest text-gold">FULL</span> : null}
+              {rec ? (rec.plays === 0 ? <span className="text-xs text-muted">Skipped</span> : s.sensitive ? <Icon name="Check" size={18} className="text-mint" /> : <Stars n={rec.stars} size={14} />) : open ? <Icon name="Play" size={18} className="text-cyan" /> : paid ? <span className="text-[10px] font-black tracking-widest text-gold">FULL</span> : null}
             </button>
           );
         })}

@@ -4,9 +4,9 @@ import { c } from './helpers';
 /** One of these is served per calendar day, in rotation. */
 export const DAILY: DailyChaos[] = [
   { id: 'd1', title: 'Wrong Chat', setup: 'You meant to text your friend “ugh my mom is SO annoying.” You sent it to your mom.', tip: 'Owning an awkward moment fast makes it shrink.', choices: [
-    c('a', '“Okay that was meant for Lily. I’m frustrated about the curfew. Can we talk?”', 'calm', 3, 'voice', 'Mom replies “lol. yes we can talk.” Crisis averted.'),
+    c('a', '“Okay that was meant for Lily. I’m frustrated about the curfew. Can we talk?”', 'reactive', 3, 'voice', 'Mom replies “lol. yes we can talk.” Crisis averted.'),
     c('b', 'Pretend your phone got hacked.', 'avoid', 0, 'voice', 'Nobody believes that. Ever.'),
-    c('c', '“…new phone who dis”', 'humor', 2, 'voice', 'Mom sends “😂 we need to talk though.”'),
+    c('c', '“…new phone who dis”', 'humor', 3, 'voice', 'Mom sends “😂 ok that was funny. we do need to talk though.” The ice is broken.'),
   ] },
   { id: 'd2', title: 'Spilled Drink', setup: 'Someone bumps you in the hall and your drink spills all over your shirt.', tip: 'Most bumps are accidents. Assume that first.', choices: [
     c('a', '“Watch where you’re going!”', 'reactive', 0, 'control', 'They were already apologizing. Now they’re annoyed too.'),
@@ -25,11 +25,11 @@ export const DAILY: DailyChaos[] = [
   ] },
   { id: 'd5', title: 'Inside Joke', setup: 'Your friends are laughing at an inside joke you don’t get.', tip: 'Asking to be let in is braver than pretending.', choices: [
     c('a', 'Fake laugh.', 'avoid', 1, 'awareness', 'You laugh. You still feel outside.'),
-    c('b', '“Okay I need the backstory on this one.”', 'calm', 3, 'voice', 'They tell you. Now it’s your inside joke too.'),
+    c('b', '“Okay I need the backstory on this one.”', 'humor', 3, 'voice', 'They tell you. Now it’s your inside joke too.'),
     c('c', '“Must be nice to have secret jokes.”', 'reactive', 0, 'control', 'Awkward pause. Nobody explains now.'),
   ] },
   { id: 'd6', title: 'Hard No', setup: 'A friend asks to copy your homework. Again.', tip: 'Helping and doing it for them aren’t the same.', choices: [
-    c('a', '“I can’t send it, but I can explain number 4.”', 'calm', 3, 'boundaries', 'They actually get it. Next time they won’t need you.'),
+    c('a', '“I can’t send it, but I can explain number 4.”', 'reactive', 3, 'boundaries', 'They actually get it. Next time they won’t need you.'),
     c('b', 'Send it. It’s easier.', 'avoid', 0, 'boundaries', 'The teacher notices identical answers.'),
     c('c', '“Do your own work for once.”', 'reactive', 1, 'empathy', 'Boundary held, friendship dinged.'),
   ] },
@@ -44,7 +44,7 @@ export const DAILY: DailyChaos[] = [
     c('c', 'Say nothing and feel bad about it all day.', 'avoid', 1, 'awareness', 'The pic stays up. So does the feeling.'),
   ] },
   { id: 'd9', title: 'Interrupted', setup: 'You start telling a story and someone talks over you. Again.', tip: 'A calm reclaim keeps your voice in the room.', choices: [
-    c('a', '“Hold on, I wasn’t done.” (with a smile)', 'calm', 3, 'voice', 'They laugh: “sorry, go!” Everyone listens.'),
+    c('a', '“Hold on, I wasn’t done.” (with a smile)', 'reactive', 3, 'voice', 'They laugh: “sorry, go!” Everyone listens.'),
     c('b', 'Stop talking and stay quiet the rest of lunch.', 'avoid', 0, 'voice', 'Nobody notices. That’s the problem.'),
     c('c', '“Can I finish ONE sentence please??”', 'reactive', 1, 'control', 'Point made, mood dipped.'),
   ] },
@@ -59,17 +59,17 @@ export const DAILY: DailyChaos[] = [
     c('c', 'Glare at the people laughing.', 'reactive', 1, 'control', 'They laugh more.'),
   ] },
   { id: 'd12', title: 'Birthday Forgotten', setup: 'Your friend forgot your birthday. You’re hurt.', tip: 'People can’t fix what they don’t know about.', choices: [
-    c('a', '“Hey, yesterday was my birthday and I was kinda bummed you forgot.”', 'calm', 3, 'voice', 'They feel terrible and take you for ice cream.'),
+    c('a', '“Hey, yesterday was my birthday and I was kinda bummed you forgot.”', 'reactive', 3, 'voice', 'They feel terrible and take you for ice cream.'),
     c('b', 'Forget their birthday on purpose next time.', 'reactive', 0, 'empathy', 'Revenge doesn’t feel as good as you thought.'),
     c('c', 'Say nothing. They should’ve remembered.', 'avoid', 1, 'voice', 'They never find out, and you never get the ice cream.'),
   ] },
   { id: 'd13', title: 'Snack Thief', setup: 'Your friend keeps eating your lunch snacks without asking.', tip: 'Small boundaries prevent big blowups.', choices: [
-    c('a', '“Hey, I need these today. Ask me first next time?”', 'calm', 3, 'boundaries', '“Oh, my bad!” Fixed.'),
+    c('a', '“Hey, I need these today. Ask me first next time?”', 'reactive', 3, 'boundaries', '“Oh, my bad!” Fixed.'),
     c('b', 'Hide your snacks forever.', 'avoid', 1, 'voice', 'Works. Kind of a lot of effort though.'),
-    c('c', '“I’m starting a snack tax. You owe me 4 granola bars.”', 'humor', 2, 'boundaries', 'They laugh and bring you one tomorrow.'),
+    c('c', '“I’m starting a snack tax. You owe me 4 granola bars.”', 'humor', 3, 'boundaries', 'They laugh, bring you one tomorrow, and start asking first.'),
   ] },
   { id: 'd14', title: 'Big Feelings', setup: 'You’re so frustrated with homework that you want to throw your laptop.', tip: 'Feelings pass faster when you name them.', choices: [
-    c('a', 'Say out loud: “I’m frustrated.” Take a 5-minute walk.', 'calm', 3, 'awareness', 'You come back and figure it out.'),
+    c('a', 'Say out loud: “I’m frustrated.” Take a 5-minute walk.', 'avoid', 3, 'awareness', 'You come back and figure it out.'),
     c('b', 'Slam the laptop shut.', 'reactive', 0, 'control', 'Now you’re frustrated AND worried you broke it.'),
     c('c', 'Give up on the assignment.', 'avoid', 1, 'control', 'Short-term relief, long-term zero.'),
   ] },
@@ -89,14 +89,14 @@ export const DAILY: DailyChaos[] = [
     c('c', '“You’re always early, that’s on you.”', 'reactive', 0, 'empathy', 'They leave.'),
   ] },
   { id: 'd18', title: 'Asked to Lie', setup: 'A friend asks you to tell their parents they were at your house. They weren’t.', tip: 'You can be loyal without lying for someone.', choices: [
-    c('a', '“I can’t lie to your parents. I hope you’re safe though, want to talk?”', 'calm', 3, 'boundaries', 'They sigh, but they respect it.'),
+    c('a', '“I can’t lie to your parents. I hope you’re safe though, want to talk?”', 'reactive', 3, 'boundaries', 'They sigh, but they respect it.'),
     c('b', 'Lie for them.', 'avoid', 0, 'boundaries', 'Their parents call your parents. Now you’re both in trouble.'),
     c('c', '“Absolutely not, are you crazy?”', 'reactive', 1, 'empathy', 'Right answer, rough delivery.'),
   ] },
   { id: 'd19', title: 'Gift You Hate', setup: 'Your aunt gives you a sweater with a cat in sunglasses on it.', tip: 'Gratitude is about the person, not the thing.', choices: [
     c('a', '“Thank you for thinking of me!”', 'calm', 3, 'empathy', 'She beams. The sweater is a whole meme now.'),
     c('b', '“Uh… do you have the receipt?”', 'reactive', 0, 'empathy', 'Her smile disappears.'),
-    c('c', '“This cat is cooler than me.”', 'humor', 2, 'empathy', 'She laughs. Honestly, true.'),
+    c('c', '“This cat is cooler than me.”', 'humor', 3, 'empathy', 'She laughs so hard she takes a photo of you in it. Honestly, true.'),
   ] },
   { id: 'd20', title: 'Bad Haircut', setup: 'Your friend got a haircut. It’s… a choice. They ask what you think.', tip: 'Find something true and kind to say.', choices: [
     c('a', '“It’s a bold look! How do YOU feel about it?”', 'calm', 3, 'empathy', 'They admit they’re unsure. You hype them up.'),
@@ -109,12 +109,12 @@ export const DAILY: DailyChaos[] = [
     c('c', '“Saving the best for last, obviously.”', 'humor', 3, 'awareness', 'Laughs. Confidence looks good on you.'),
   ] },
   { id: 'd22', title: 'Overloaded', setup: 'You have practice, a test, and a friend asking you to hang out. You’re fried.', tip: 'Saying no to one thing is saying yes to yourself.', choices: [
-    c('a', '“I really want to, but I need a rest night. Saturday?”', 'calm', 3, 'boundaries', 'They say “totally!” You sleep 9 hours.'),
+    c('a', '“I really want to, but I need a rest night. Saturday?”', 'avoid', 3, 'boundaries', 'They say “totally!” You sleep 9 hours.'),
     c('b', 'Say yes to everything and run on 4 hours of sleep.', 'avoid', 0, 'boundaries', 'You bomb the test. You were too tired to enjoy hanging out anyway.'),
     c('c', 'Cancel everything without explaining.', 'avoid', 1, 'voice', 'You rest, but your friend feels ditched.'),
   ] },
   { id: 'd23', title: 'Mispronounced', setup: 'A new teacher mispronounces your name in front of the class.', tip: 'Your name is worth correcting.', choices: [
-    c('a', '“It’s actually pronounced {name}. Easy mistake!”', 'calm', 3, 'voice', 'She repeats it right and thanks you.'),
+    c('a', '“It’s actually pronounced {name}. Easy mistake!”', 'reactive', 3, 'voice', 'She repeats it right and thanks you.'),
     c('b', 'Let it go. Forever.', 'avoid', 1, 'voice', 'Now you answer to the wrong name all year.'),
     c('c', 'Roll your eyes loudly.', 'reactive', 0, 'control', 'She doesn’t know why you’re annoyed.'),
   ] },
@@ -124,17 +124,17 @@ export const DAILY: DailyChaos[] = [
     c('c', '“Who did this? Tell me.”', 'reactive', 1, 'empathy', 'Loyal, but they just needed calm.'),
   ] },
   { id: 'd25', title: 'Credit Stolen', setup: 'In a group meeting, someone presents your idea as theirs.', tip: 'Claim your work calmly, in the moment.', choices: [
-    c('a', '“Glad you liked that idea from our chat earlier! I can add more on it.”', 'calm', 3, 'voice', 'Everyone now knows whose idea it was. No fight needed.'),
+    c('a', '“Glad you liked that idea from our chat earlier! I can add more on it.”', 'reactive', 3, 'voice', 'Everyone now knows whose idea it was. No fight needed.'),
     c('b', '“That was MY idea!”', 'reactive', 1, 'control', 'True, but it gets tense.'),
     c('c', 'Say nothing and seethe.', 'avoid', 0, 'voice', 'It happens again next week.'),
   ] },
   { id: 'd26', title: 'Mean Nickname', setup: 'Some kids start calling you a nickname you don’t like.', tip: 'A clear, calm “no” is powerful. If it keeps going, tell an adult.', choices: [
-    c('a', '“Not a fan of that one. Just use my name.”', 'calm', 3, 'boundaries', 'Most of them stop. One doesn’t, and you tell a teacher.'),
+    c('a', '“Not a fan of that one. Just use my name.”', 'reactive', 3, 'boundaries', 'Most of them stop. One doesn’t, and you tell a teacher.'),
     c('b', 'Act like it doesn’t bother you even though it does.', 'avoid', 1, 'awareness', 'It sticks.'),
     c('c', 'Come up with a meaner nickname for them.', 'reactive', 0, 'control', 'Now it’s a nickname war.'),
   ] },
   { id: 'd27', title: 'Apology Ignored', setup: 'You apologized to a friend. They said “k.” That’s it.', tip: 'You can apologize. You can’t force forgiveness.', choices: [
-    c('a', 'Give them space. You did your part.', 'calm', 3, 'boundaries', 'Two days later, they text you like normal.'),
+    c('a', 'Give them space. You did your part.', 'avoid', 3, 'boundaries', 'Two days later, they text you like normal.'),
     c('b', 'Apologize five more times.', 'avoid', 1, 'control', 'They feel pressured.'),
     c('c', '“Wow, I said sorry, what else do you want?”', 'reactive', 0, 'empathy', 'That undoes the apology.'),
   ] },

@@ -32,15 +32,46 @@ export function hydrate(raw: string | null): GameState {
   const base = freshState();
   if (!raw) return base;
   try {
-    const s = JSON.parse(raw) as Partial<GameState>;
+    const s = JSON.parse(raw) as Record<string, unknown>;
+    if (!s || typeof s !== 'object' || Array.isArray(s)) return base;
+    // Every field is type-checked so a damaged save can never crash the app.
+    const num = (v: unknown, d: number) => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.floor(v) : d);
+    const str = (v: unknown, d: string) => (typeof v === 'string' ? v : d);
+    const bool = (v: unknown, d: boolean) => (typeof v === 'boolean' ? v : d);
+    const obj = (v: unknown) => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {});
+    const numMap = <K extends string>(v: unknown, keys: K[]) => Object.fromEntries(keys.map((k) => [k, num(obj(v)[k], 0)])) as Record<K, number>;
+    const records: GameState['records'] = {};
+    for (const [id, r] of Object.entries(obj(s.records))) {
+      const o = obj(r);
+      records[id] = { stars: Math.min(3, num(o.stars, 0)), bestScore: num(o.bestScore, 0), plays: num(o.plays, 0) };
+    }
+    const d = obj(s.daily);
+    const done: Record<string, number> = {};
+    for (const [k, v] of Object.entries(obj(d.done))) if (typeof v === 'number') done[k] = v;
+    const picks: Record<string, string> = {};
+    for (const [k, v] of Object.entries(obj(d.picks))) if (typeof v === 'string') picks[k] = v;
+    const set = obj(s.settings);
+    const arch = ['chill', 'chaos', 'strategist', 'connector'].includes(s.archetype as string) ? (s.archetype as GameState['archetype']) : null;
     return {
-      ...base,
-      ...s,
-      skills: { ...base.skills, ...(s.skills ?? {}) },
-      tones: { ...base.tones, ...(s.tones ?? {}) },
-      records: { ...(s.records ?? {}) },
-      daily: { ...base.daily, ...(s.daily ?? {}), done: { ...(s.daily?.done ?? {}) }, picks: { ...(s.daily?.picks ?? {}) } },
-      settings: { ...base.settings, ...(s.settings ?? {}) },
+      version: 1,
+      onboarded: bool(s.onboarded, false),
+      name: str(s.name, '').slice(0, 24),
+      archetype: arch,
+      aura: num(s.aura, 0),
+      skills: numMap(s.skills, ['awareness', 'control', 'empathy', 'voice', 'boundaries']),
+      tones: numMap(s.tones, ['calm', 'reactive', 'avoid', 'humor']),
+      records,
+      daily: {
+        lastDate: typeof d.lastDate === 'string' ? d.lastDate : null,
+        streak: num(d.streak, 0),
+        bestStreak: num(d.bestStreak, 0),
+        done,
+        picks,
+      },
+      auraColor: /^#[0-9a-f]{6}$/i.test(str(s.auraColor, '')) ? (s.auraColor as string) : base.auraColor,
+      settings: { haptics: bool(set.haptics, base.settings.haptics), reduceMotion: bool(set.reduceMotion, base.settings.reduceMotion) },
+      unlocked: bool(s.unlocked, false),
+      createdAt: str(s.createdAt, base.createdAt),
     };
   } catch {
     return base;
@@ -127,7 +158,7 @@ export function worldProgress(state: GameState, worldId: keyof typeof SCENARIOS_
   const list = SCENARIOS_BY_WORLD[worldId];
   const done = list.filter((s) => state.records[s.id]).length;
   const stars = list.reduce((n, s) => n + (state.records[s.id]?.stars ?? 0), 0);
-  return { done, total: list.length, stars, maxStars: list.length * 3 };
+  return { done, total: list.length, stars, maxStars: list.filter((s) => !s.sensitive).length * 3 };
 }
 
 export function nextScenario(state: GameState): Scenario | null {
@@ -141,7 +172,8 @@ export function nextScenario(state: GameState): Scenario | null {
 
 export const starsFor = (score: number, max: number) => {
   const r = score / max;
-  return r >= 0.83 ? 3 : r >= 0.5 ? 2 : 1;
+  // 3 stars = a perfect read. Anything strong but imperfect is 2.
+  return r >= 0.99 ? 3 : r >= 0.5 ? 2 : 1;
 };
 
 function tally(state: GameState, picks: Choice[]) {
@@ -171,11 +203,12 @@ export function completeScenario(state: GameState, s: Scenario, picks: Choice[])
   const max = picks.length * 3;
   const stars = starsFor(score, max);
   const prev = state.records[s.id];
-  const firstClear = !prev;
-  const newBest = !prev || score > prev.bestScore;
+  // A skipped sensitive scenario has a record with 0 plays; playing it later still counts as a first clear.
+  const firstClear = !prev || prev.plays === 0;
+  const newBest = firstClear || score > prev.bestScore;
   const auraGained = s.sensitive
     ? firstClear ? 60 : 0
-    : firstClear ? 20 + 10 * score : newBest ? 10 * (score - prev.bestScore) : 0;
+    : firstClear ? 20 + 10 * score : newBest ? 10 * (score - prev!.bestScore) : 0;
 
   // Skills and play style come from first clears only, so replays can't be farmed.
   const { skills, tones } = firstClear ? tally(state, picks) : { skills: state.skills, tones: state.tones };
@@ -187,7 +220,8 @@ export function completeScenario(state: GameState, s: Scenario, picks: Choice[])
     records: {
       ...state.records,
       [s.id]: {
-        stars: s.sensitive ? 3 : Math.max(stars, prev?.stars ?? 0),
+        // Sensitive scenarios are never scored.
+        stars: s.sensitive ? 0 : Math.max(stars, prev?.stars ?? 0),
         bestScore: Math.max(score, prev?.bestScore ?? 0),
         plays: (prev?.plays ?? 0) + 1,
       },
@@ -203,7 +237,8 @@ export function skipScenario(state: GameState, s: Scenario): GameState {
 }
 
 export function completeDaily(state: GameState, date: string, pick: Choice): [GameState, RunResult] {
-  const already = state.daily.done[date] !== undefined;
+  // Played already, or the saved date is later than "today" (clock or time-zone change): never touch the streak.
+  const already = state.daily.done[date] !== undefined || (!!state.daily.lastDate && state.daily.lastDate > date);
   const auraGained = already ? 0 : 15 + 5 * pick.score;
   const yesterday = shiftDate(date, -1);
   const streak = already
@@ -218,11 +253,11 @@ export function completeDaily(state: GameState, date: string, pick: Choice): [Ga
     skills,
     tones,
     daily: {
-      lastDate: date,
+      lastDate: state.daily.lastDate && state.daily.lastDate > date ? state.daily.lastDate : date,
       streak,
       bestStreak: Math.max(state.daily.bestStreak, streak),
-      done: { ...state.daily.done, [date]: already ? state.daily.done[date] : pick.score },
-      picks: { ...(state.daily.picks ?? {}), [date]: already ? state.daily.picks?.[date] ?? pick.id : pick.id },
+      done: { ...state.daily.done, [date]: state.daily.done[date] ?? pick.score },
+      picks: { ...(state.daily.picks ?? {}), [date]: state.daily.picks?.[date] ?? pick.id },
     },
   };
   return [next, finish(state, next, { score: pick.score, max: 3, stars: starsFor(pick.score, 3), auraGained, firstClear: !already, newBest: !already })];

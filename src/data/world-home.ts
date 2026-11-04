@@ -11,14 +11,14 @@ export const HOME: Scenario[] = [
     mode: 'scene',
     place: 'Kitchen, 10:40 PM',
     lines: [
-      { from: 'Mom', text: 'It’s almost 11. I said phones off at 10:30. Hand it over.' },
+      { from: 'Mom', text: 'It’s 10:40. I said phones off at 10:30. Hand it over.' },
       { from: '', text: 'You were in the middle of planning tomorrow’s project with your group.' },
     ],
     beats: [
       {
         prompt: 'She’s holding out her hand. What do you do?',
         choices: [
-          c('a', '“Okay. Can I send one message saying I’m going offline? My group’s waiting on me.”', 'calm', 3, 'voice', 'She pauses, then nods. “One message.” Respect got you something.'),
+          c('a', '“Okay. Can I send one ‘going offline’ text first?”', 'calm', 3, 'voice', 'She pauses, then nods. “One message.” Respect got you something.'),
           c('b', '“This is so unfair! You never let me do anything!”', 'reactive', 0, 'control', 'Now it’s about your attitude. The phone is gone until the weekend.'),
           c('c', 'Hand it over and storm to your room.', 'avoid', 1, 'control', 'You follow the rule, but the door slam costs you.'),
           c('d', '“Can my phone at least get a goodnight kiss first?”', 'humor', 2, 'voice', 'She almost laughs. “Give it here, goofball.” Tension down.'),
@@ -64,7 +64,7 @@ export const HOME: Scenario[] = [
           c('a', '“Hey, that’s mine. Ask me first next time, okay?”', 'reactive', 3, 'boundaries', 'He rolls his eyes but says “fine.” Clear and short.'),
           c('b', 'Yell for a parent.', 'reactive', 1, 'control', 'Mom yells at both of you for yelling.'),
           c('c', 'Sigh and let it go. Again.', 'avoid', 0, 'boundaries', 'He learns he can take anything. He will.'),
-          c('d', '“Nice hoodie. Rental fee is one snack back.”', 'humor', 3, 'boundaries', 'He laughs and hands back the snack. Message delivered, no fight.'),
+          c('d', '“Nice hoodie. Rental fee is one snack back.”', 'humor', 2, 'boundaries', 'He laughs and hands back the snack. No fight, but he’ll probably take it again tomorrow.'),
         ],
       },
       {
@@ -112,7 +112,7 @@ export const HOME: Scenario[] = [
           c('a', 'Answer honestly and offer to have him pick you up.', 'calm', 3, 'voice', 'He agrees to 10:30. Being transparent earned you an extra 90 minutes.'),
           c('b', '“Why do you need to know everything?”', 'reactive', 0, 'empathy', 'He takes that as a sign something’s off. Curfew stays at 9.'),
           c('c', 'Give vague answers.', 'avoid', 1, 'voice', '“Then it’s 9.”'),
-          c('d', 'Answer, and ask what would help him feel okay about it.', 'calm', 2, 'empathy', 'He says “just text me at 10.” Good, but you didn’t offer a ride plan, so it stays at 10.'),
+          c('d', 'Answer, and ask what would help him feel okay about it.', 'calm', 2, 'empathy', 'He says “just text me at 10.” Good, but you didn’t offer a ride plan, so he only moves it to 10.'),
         ],
       },
     ],
@@ -148,7 +148,7 @@ export const HOME: Scenario[] = [
       {
         prompt: 'Your dad sighs. “What happened?”',
         choices: [
-          c('a', 'Explain what’s hard, and ask about getting a tutor or going to office hours.', 'calm', 3, 'awareness', 'They help you set up extra help. You’re in it together now.'),
+          c('a', 'Explain what’s hard, and ask about getting a tutor or going to office hours.', 'calm', 2, 'awareness', 'They set up extra help, but still wonder why it got this far.'),
           c('b', 'Blame the teacher.', 'reactive', 1, 'awareness', 'Maybe the teacher is tough, but your parents want to hear your part.'),
           c('c', '“I don’t know.”', 'avoid', 1, 'awareness', 'They push harder. The conversation drags on.'),
           c('d', 'Admit you stopped doing homework when it got confusing.', 'reactive', 3, 'awareness', 'Honesty. They respect it, and now they can actually help.'),
@@ -222,11 +222,14 @@ export const HOME: Scenario[] = [
           c('a', '“I did them at 6. These are from after. I can help clean them though.”', 'calm', 3, 'voice', 'Dad nods. “Okay, thanks.” Facts plus a helpful offer.'),
           c('b', '“It wasn’t ME! Why do I always get blamed?”', 'reactive', 0, 'control', 'Now it’s a whole thing. The dishes are still there.'),
           c('c', 'Just wash them and say nothing.', 'avoid', 1, 'voice', 'Peace kept. But next time, same thing.'),
-          c('d', '“The dishes have been framed, Dad. I have an alibi.”', 'humor', 3, 'voice', 'He laughs. “Okay, detective.” Facts come out, nobody’s mad.'),
+          c('d', '“The dishes have been framed, Dad. I have an alibi.”', 'humor', 2, 'voice', 'He laughs. “Okay, detective.” But he still thinks you might be dodging, until you explain.'),
         ],
       },
       {
         prompt: 'Your sister walks in and says “wasn’t me.”',
+        promptByChoice: {
+          c: 'Next night, same thing. Your sister walks in and says “wasn’t me.”',
+        },
         choices: [
           c('a', '“It’s okay, let’s just do them together real quick.”', 'calm', 3, 'empathy', 'She grumbles, but helps. Dad is impressed.'),
           c('b', '“You’re literally such a liar.”', 'reactive', 0, 'control', 'Big fight. Everyone loses screen time.'),
@@ -237,7 +240,7 @@ export const HOME: Scenario[] = [
     ],
     lesson: {
       skill: 'voice',
-      title: 'Facts, not feelings, first',
+      title: 'Timeline, then teamwork',
       body: 'When you’re wrongly blamed, leading with “it’s not fair” starts a fight. Leading with the timeline and an offer to help ends one.',
       tryThis: '“Here’s what actually happened. Want me to help fix it?”',
     },

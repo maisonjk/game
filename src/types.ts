@@ -25,6 +25,8 @@ export interface Beat {
   prompt: string;
   /** Optional prompt override depending on the tone picked in the previous beat. */
   promptByTone?: Partial<Record<Tone, string>>;
+  /** Optional prompt override keyed by the exact choice id picked in the previous beat (wins over promptByTone). */
+  promptByChoice?: Record<string, string>;
   choices: Choice[];
 }
 

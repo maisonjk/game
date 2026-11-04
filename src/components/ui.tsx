@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Star as StarIcon, Circle } from 'lucide-react';
 import { ICONS } from './icons';
 import { tap } from '../lib/haptics';
@@ -81,7 +82,35 @@ export function Stars({ n, size = 16, max = 3 }: { n: number; size?: number; max
   );
 }
 
+/**
+ * Makes everything behind a modal unreachable for VoiceOver and keyboard (inert),
+ * and moves focus into the modal. Nested modals stack safely.
+ */
+let modalDepth = 0;
+export function useModal(active: boolean, focusRef: React.RefObject<HTMLElement | null>, mode: 'root' | 'chrome' = 'root') {
+  useEffect(() => {
+    if (!active) return;
+    // Portaled modals hide all of #root; the scenario player lives inside #root, so it hides only the app chrome.
+    const root = mode === 'root' ? document.getElementById('root') : null;
+    const chrome = document.getElementById('app-chrome');
+    const prev = document.activeElement as HTMLElement | null;
+    modalDepth++;
+    if (root) root.inert = true;
+    if (chrome) chrome.inert = true;
+    const t = setTimeout(() => focusRef.current?.focus(), 30);
+    return () => {
+      clearTimeout(t);
+      modalDepth--;
+      if (root) root.inert = false;
+      if (modalDepth === 0 && chrome) chrome.inert = false;
+      prev?.focus?.();
+    };
+  }, [active, focusRef, mode]);
+}
+
 export function Sheet({ open, onClose, children, title, tall, footer }: { open: boolean; onClose: () => void; children: React.ReactNode; title?: string; tall?: boolean; footer?: React.ReactNode }) {
+  const box = useRef<HTMLDivElement>(null);
+  useModal(open, box);
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
@@ -89,10 +118,10 @@ export function Sheet({ open, onClose, children, title, tall, footer }: { open: 
     return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose]);
   if (!open) return null;
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[60] flex items-end justify-center" role="dialog" aria-modal="true" aria-label={title}>
-      <button aria-label="Close" className="absolute inset-0 bg-black/65 anim-fade" onClick={onClose} />
-      <div className={`relative w-full max-w-lg bg-panel border-t border-line rounded-t-[28px] anim-sheet flex flex-col ${tall ? 'h-[88vh]' : 'max-h-[88vh]'}`}>
+      <button aria-label="Close" tabIndex={-1} className="absolute inset-0 bg-black/65 anim-fade" onClick={onClose} />
+      <div ref={box} tabIndex={-1} className={`relative w-full max-w-lg bg-panel border-t border-line rounded-t-[28px] anim-sheet flex flex-col outline-none ${tall ? 'h-[88vh]' : 'max-h-[88vh]'}`}>
         <div className="flex items-center justify-between px-5 pt-4 pb-2 shrink-0">
           <div className="w-10" />
           <div className="w-10 h-1.5 rounded-full bg-white/15" />
@@ -104,7 +133,8 @@ export function Sheet({ open, onClose, children, title, tall, footer }: { open: 
         <div className={`overflow-y-auto no-scrollbar px-6 flex-1 ${footer ? 'pb-4' : 'pb-safe'}`}>{children}</div>
         {footer && <div className="shrink-0 px-6 pt-3 pb-safe border-t border-line bg-panel">{footer}</div>}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -135,7 +165,7 @@ export function Card({ children, className = '', style }: { children: React.Reac
 }
 
 export function Avatar({ name, color, emoji, size = 64 }: { name: string; color: string; emoji?: string; size?: number }) {
-  const initial = (name.trim()[0] ?? '?').toUpperCase();
+  const initial = ([...name.trim()][0] ?? '?').toUpperCase();
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <div

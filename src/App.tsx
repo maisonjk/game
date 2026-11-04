@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { Component, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { GameProvider, useGame } from './lib/store';
 import { localDate, needsUnlock, nextInWorld, nextScenario, type RunResult } from './lib/game';
@@ -20,10 +20,34 @@ export default function App() {
     import('@capacitor/splash-screen').then(({ SplashScreen }) => SplashScreen.hide().catch(() => {}));
   }, []);
   return (
-    <GameProvider fallback={<Splash />}>
-      <Root />
-    </GameProvider>
+    <ErrorBoundary>
+      <GameProvider fallback={<Splash />}>
+        <Root />
+      </GameProvider>
+    </ErrorBoundary>
   );
+}
+
+/** Last line of defense: never leave a teen staring at a blank screen. */
+class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <div className="min-h-[100dvh] bg-ink text-text grid place-items-center px-8 text-center">
+        <div>
+          <div className="font-display font-black text-3xl uppercase">Something glitched</div>
+          <p className="mt-3 text-muted">Tap below to reload. Your progress is saved on this phone.</p>
+          <button className="mt-6 min-h-12 px-6 rounded-2xl bg-cyan text-ink font-display font-extrabold uppercase" onClick={() => location.reload()}>
+            Reload
+          </button>
+        </div>
+      </div>
+    );
+  }
 }
 
 function Root() {
@@ -41,6 +65,12 @@ function Game() {
   const [legal, setLegal] = useState<LegalPage | null>(null);
   const [toasts, setToasts] = useState<{ id: number; node: ReactNode }[]>([]);
   const wasOnboarded = useRef(state.onboarded);
+  // Re-render each minute so the Daily dot reappears after midnight.
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setTick((n) => n + 1), 60_000);
+    return () => clearInterval(t);
+  }, []);
 
   // First run: go straight from onboarding into scenario 1.
   useEffect(() => {
@@ -90,7 +120,7 @@ function Game() {
   return (
     <div className="min-h-[100dvh] bg-ink">
       <div className="fixed inset-0 bg-grid pointer-events-none" />
-      <div className="relative">
+      <div className="relative" id="app-chrome">
         <Header onProfile={() => setTab('you')} />
         <main>
           {tab === 'map' && <MapScreen onPlay={(s) => setPlaying({ s })} onPaywall={openPaywall} />}

@@ -14,8 +14,8 @@ function useCountdown() {
   }, []);
   const midnight = new Date(now);
   midnight.setHours(24, 0, 0, 0);
-  const mins = Math.max(0, Math.round((midnight.getTime() - now.getTime()) / 60000));
-  return { label: `${Math.floor(mins / 60)}h ${mins % 60}m`, today: localDate(now) };
+  const mins = Math.max(1, Math.ceil((midnight.getTime() - now.getTime()) / 60000));
+  return { label: mins < 60 ? `${mins}m` : `${Math.floor(mins / 60)}h ${mins % 60}m`, today: localDate(now) };
 }
 
 export default function DailyScreen({ onBadges }: { onBadges: (r: RunResult) => void }) {
@@ -42,8 +42,8 @@ export default function DailyScreen({ onBadges }: { onBadges: (r: RunResult) => 
   };
 
   const week = Array.from({ length: 7 }).map((_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() - (6 - i));
+    const [y, m, dd] = today.split('-').map(Number);
+    const d = new Date(y, m - 1, dd - (6 - i));
     const key = localDate(d);
     return { key, label: d.toLocaleDateString(undefined, { weekday: 'narrow' }), done: state.daily.done[key] !== undefined, today: key === today };
   });
@@ -123,7 +123,18 @@ export default function DailyScreen({ onBadges }: { onBadges: (r: RunResult) => 
             </div>
           ))}
         </div>
-        {done && <p className="mt-3 text-sm text-muted">Come back tomorrow to keep it going.</p>}
+        {done && (() => {
+          const [y, m, dd] = today.split('-').map(Number);
+          const tomorrow = dailyFor(localDate(new Date(y, m - 1, dd + 1)));
+          return (
+            <div className="mt-4 pt-4 border-t border-line flex items-center gap-3">
+              <Icon name="Lock" size={16} className="text-muted shrink-0" />
+              <p className="text-sm text-muted">
+                Tomorrow: <span className="font-display font-extrabold text-text uppercase">{tomorrow.title}</span>. Come back to keep it going.
+              </p>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );

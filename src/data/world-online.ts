@@ -28,7 +28,7 @@ export const ONLINE: Scenario[] = [
       {
         prompt: 'You still can’t stop thinking about it.',
         choices: [
-          c('a', 'Remind yourself: 42 people liked it, 1 stranger didn’t. Text a friend about it.', 'calm', 3, 'awareness', 'Your friend replies “that video was SO good.” Perspective restored.'),
+          c('a', 'Remind yourself: 43 people liked it, 1 stranger didn’t. Text a friend about it.', 'calm', 2, 'awareness', 'Perspective helps, but you still check the comment three more times.'),
           c('b', 'Keep checking their profile to see who they are.', 'avoid', 0, 'awareness', 'An hour gone. Feeling worse.'),
           c('c', 'Post a long story about haters.', 'reactive', 1, 'control', 'It gets attention, but now the hater knows they got to you.'),
           c('d', 'Log off and go practice.', 'avoid', 3, 'control', 'Best revenge. Your next one hits 200 likes.'),
@@ -107,10 +107,14 @@ export const ONLINE: Scenario[] = [
       },
       {
         prompt: 'Bella says: “you’re no fun. It’s just a joke.”',
+        promptByChoice: {
+          d: 'Next day Bella texts: “the dog vid was cute but the prank would’ve gone viral. you’re no fun.”',
+          c: 'Bella texts: “set it up for tomorrow!!” You still don’t want to do it.',
+        },
         choices: [
           c('a', '“Still a no for me. I’m down for anything else though.”', 'reactive', 3, 'boundaries', 'She drops it. Holding steady kept you from something you’d regret.'),
           c('b', 'Give in so she won’t be annoyed.', 'avoid', 0, 'boundaries', 'The video goes up. Your ex-friend sees it. It gets ugly.'),
-          c('c', '“It’s only a joke if she’s laughing too.”', 'calm', 3, 'empathy', 'Bella pauses: “…ok yeah. fair.”'),
+          c('c', '“It’s only a joke if she’s laughing too.”', 'calm', 2, 'empathy', 'Bella pauses: “…ok yeah. fair.” She drops it for now, but brings it up again next week.'),
           c('d', '“Then find someone else.”', 'reactive', 1, 'voice', 'True, but now Bella is annoyed at you.'),
         ],
       },
@@ -148,7 +152,7 @@ export const ONLINE: Scenario[] = [
         prompt: 'The next night, you want to avoid this again.',
         choices: [
           c('a', 'Charge your phone outside your room.', 'avoid', 3, 'boundaries', 'Out of reach, out of mind. Sleep improves.'),
-          c('b', 'Set a screen time limit on the apps.', 'calm', 3, 'control', 'You tap “ignore limit” a few times, but it helps more than you expected.'),
+          c('b', 'Set a screen time limit on the apps.', 'calm', 2, 'control', 'You tap “ignore limit” a few times. It helps a bit, but the phone’s still right there.'),
           c('c', 'Do nothing. You’ll just be more disciplined.', 'avoid', 1, 'awareness', 'Willpower at 1 AM is pretty much zero.'),
           c('d', 'Delete every app forever.', 'reactive', 1, 'control', 'Lasts 2 days. Extreme rules usually break.'),
         ],
@@ -186,7 +190,10 @@ export const ONLINE: Scenario[] = [
         ],
       },
       {
-        prompt: 'You blocked them, but you still feel weird about it.',
+        prompt: 'Later, you’re still thinking about that account.',
+        promptByChoice: {
+          a: 'You blocked them, but you still feel weird about it.',
+        },
         choices: [
           c('a', 'Tell a parent or trusted adult.', 'reactive', 3, 'voice', 'They thank you for telling them and help you check your privacy settings.'),
           c('b', 'Keep it to yourself. Nothing happened, right?', 'avoid', 1, 'voice', 'It was right to block, and telling someone helps you feel less alone with the weird feeling.'),
@@ -229,6 +236,9 @@ export const ONLINE: Scenario[] = [
       },
       {
         prompt: 'Next match, Vex is still being toxic.',
+        promptByChoice: {
+          c: 'A week later you get matched with Vex again. He starts right away.',
+        },
         choices: [
           c('a', 'Mute him and focus on your game.', 'avoid', 3, 'boundaries', 'Your next match is your best one. Peace and quiet helps.'),
           c('b', 'Trash talk him all match.', 'reactive', 0, 'control', 'You both play worse. You lose again.'),

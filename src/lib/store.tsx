@@ -46,8 +46,10 @@ export function GameProvider({ children, fallback }: { children: React.ReactNode
 
   const reset = useCallback(async () => {
     const keepUnlock = ref.current?.unlocked ?? false;
+    const keepSettings = ref.current?.settings;
     await remove(STORAGE_KEY);
-    const s = { ...freshState(), unlocked: keepUnlock };
+    const base = freshState();
+    const s = { ...base, unlocked: keepUnlock, settings: keepSettings ?? base.settings };
     ref.current = s;
     setRaw(s);
     await save(STORAGE_KEY, JSON.stringify(s));
